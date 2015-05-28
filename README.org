@@ -39,10 +39,15 @@ This file is included for comparison.
 The new reference database consists of all sequences from "Viridiplantae" of an inofficial ITS2 database release (2014).
 This file is also included in this repository.
 *** Taxonomic assignment
+Assign NCBI taxonomy on kingdom, phylum, class, order, family, genus and species level by mapping gi to taxid.
+In the analysis folder execute the following commands:
 #+BEGIN_SRC sh :dir analysis
-grep "^>" data viridiplantae_all_2014.fasta | perl -pe 's/^>(\d+).*/$1/' >viridiplantae_all_2014.gis
-perl code/gi2taxonomy.pl --gis viridiplantae_all_2014.gis\
- --out viridiplantae_all_2014.tax --species viridiplantae_all_2014.species.taxids\
+grep "^>" ../data/viridiplantae_all_2014.fasta |
+ perl -pe 's/^>(\d+).*/$1/' >viridiplantae_all_2014.gis
+perl ../code/gi2taxonomy.pl\
+ --gis viridiplantae_all_2014.gis\
+ --out viridiplantae_all_2014.tax\
+ --species viridiplantae_all_2014.species.taxids\
  --genus viridiplantae_all_2014.genus.taxids 
 #+END_SRC
 
