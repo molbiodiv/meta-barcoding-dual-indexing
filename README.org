@@ -56,8 +56,25 @@ This generates the following files:
  - viridiplantae_all_2014.species.taxids
  - viridiplantae_all_2014.genus.taxids
 All of those are also included in the precomputed folder.
-*** UTAX training
-*** RDP training
+*** UTAX and RDP training
+The following commands executed in the analysis folder generate the required fasta and tax files for RDP and UTAX:
+#+BEGIN_SRC bash :dir analysis
+perl ../code/tax2rdp_utax.pl viridiplantae_all_2014.tax\
+ ../data/viridiplantae_all_2014.fasta viridiplantae_all_2014
+#+END_SRC
+This generates the following files:
+ - viridiplantae_all_2014.gi_tax.map
+ - viridiplantae_all_2014.rdp.fa
+ - viridiplantae_all_2014.rdp.tax
+ - viridiplantae_all_2014.utax.fa
+ - viridiplantae_all_2014.utax.tax
+All of those are also included in the precomputed folder.
+The utax files are ready to be used for classification. 
+However to speed up the initial step a udb file can be created as follows:
+#+BEGIN_SRC bash :dir analysis
+usearch8 -makeudb_usearch viridiplantae_all_2014.utax.fa -output viridiplantae_all_2014.utax.udb
+#+END_SRC
+This creates the file viridiplantae_all_2014.utax.udb which is not included as its size is 225MB.
 *** Species coverage
 ** Analysis of Pollen Samples
 *** Data
