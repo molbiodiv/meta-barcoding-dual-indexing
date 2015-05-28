@@ -25,7 +25,7 @@ Only the RDP training was performed on a machine with more RAM available.
 ** Third party tools
  - [[http://its2.bioapps.biozentrum.uni-wuerzburg.de/][ITS2 database]] (Version 4.0.0 and inofficial release (included))
  - [[http://www.drive5.com/usearch/download.html][UTAX]] (Version usearch v8.0.1477_i86linux32)
- - [[https://github.com/rdpstaff/classifier][RDPclassifier]] (Version master from GitHub (3ba79f222f7a445620549633e603436c2f0eb7ba, 2015-02-20))
+ - [[https://github.com/rdpstaff/classifier][RDPclassifier]] (Version master from GitHub ([[https://github.com/rdpstaff/classifier/tree/63c637b2c8b3b941cf021d1e549caec0041b4c3c][63c637b2c8b3b941cf021d1e549caec0041b4c3c]], 2015-02-20))
  - [[https://github.com/greatfireball/NCBI-Taxonomy/tree/v0.70.5][NCBI::Taxonomy]] - perl module (Version v0.70.5, [[http://dx.doi.org/10.5281/zenodo.17375][doi:10.5281/zenodo.17375]])
  - [[http://www.r-project.org/][R]] (Version 3.1.2 (2014-10-31) -- "Pumpkin Helmet", Platform: x86_64-pc-linux-gnu (64-bit))
  - [[https://www.perl.org/][perl]] (Version v5.20.2 built for x86_64-linux-gnu-thread-multi)
