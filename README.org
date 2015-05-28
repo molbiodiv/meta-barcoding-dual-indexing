@@ -68,13 +68,45 @@ This generates the following files:
  - viridiplantae_all_2014.rdp.tax
  - viridiplantae_all_2014.utax.fa
  - viridiplantae_all_2014.utax.tax
-All of those are also included in the precomputed folder.
+The first three are also included in the precomputed folder. And the last two are included in the training/utax folder.
 The utax files are ready to be used for classification. 
 However to speed up the initial step a udb file can be created as follows:
 #+BEGIN_SRC bash :dir analysis
-usearch8 -makeudb_usearch viridiplantae_all_2014.utax.fa -output viridiplantae_all_2014.utax.udb
+usearch8 -makeudb_usearch viridiplantae_all_2014.utax.fa\
+ -output viridiplantae_all_2014.utax.udb
 #+END_SRC
-This creates the file viridiplantae_all_2014.utax.udb which is not included as its size is 225MB.
+This creates the file viridiplantae_all_2014.utax.udb which is not included as it is not required and its size is 225MB.
+To train the RDPclassifier execute the following commands 
+(warning for the train command 16GB RAM did not suffice, but 32 did):
+#+BEGIN_SRC bash :dir analysis
+mkdir rdp_trained
+
+java -jar classifier.jar rm-dupseq --infile viridiplantae_all_2014.rdp.fa\
+ --outfile viridiplantae_all_2014.rdp.rm-dupseq.fa\
+ --duplicates --min_seq_length 150
+
+java -jar classifier.jar rm-partialseq viridiplantae_all_2014.rdp.fa\
+ viridiplantae_all_2014.rdp.rm-dupseq.fa\
+ viridiplantae_all_2014.rdp.rm-dupseq.rm-partialseq.fa\
+ --alignment-mode overlap --min_gaps 50 --knn 20
+
+java -Xmx32g -jar classifier.jar train --out_dir rdp_trained\
+ --seq viridiplantae_all.rdp.rm-dupseq.rm-partialseq.fa\
+ --tax_file viridiplantae_all.rdp.tax
+
+cp data/its2.properties rdp_trained/its2.properties
+#+END_SRC
+This generates the following files:
+ - viridiplantae_all_2014.rdp.rm-dupseq.fa
+ - viridiplantae_all_2014.rdp.rm-dupseq.rm-partialseq.fa
+All of those are also included in the precomputed folder.
+And the folder rdp_trained including five files:
+ - rdp_trained/bergeyTrainingTree.xml
+ - rdp_trained/genus_wordConditionalProbList.txt
+ - rdp_trained/its2.properties
+ - rdp_trained/wordConditionalProbIndexArr.txt
+ - rdp_trained/logWordPrior.txt
+Those are the files required for RDP classification and are included as a tar.gz file in training/rdp
 *** Species coverage
 ** Analysis of Pollen Samples
 *** Data
