@@ -17,11 +17,17 @@ We provide precomputed results for most steps so don't worry if you can't get a 
 If you get substantially different results (e.g. using other versions/tools) feel free to contact me.
 You can also do so by opening an Issue here on GitHub.
 ** Hardware
+Most of the analyses were performed on a Laptop with
+ - Intel(R) Core(TM) i7-4800MQ CPU @ 2.70GHz Processor
+ - 16GB RAM
+ - Ubuntu 14.04 operating system
+Only the RDP training was performed on a machine with more RAM available.
 ** Third party tools
  - [[http://its2.bioapps.biozentrum.uni-wuerzburg.de/][ITS2 database]] (Version 4.0.0 and inofficial release (included))
  - UTAX 
  - RDPclassifier 
  - NCBI::Taxonomy - perl module
+ - R
 ** Scripts
 
 * Workflow
