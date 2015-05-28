@@ -160,6 +160,26 @@ do
 done 
 #+END_SRC
 This way you end up with a .utax file for each sample containing the utax classification.
+Create a subfolder called counts and there execute this:
+#+BEGIN_SRC bash :dir raw/utax/counts
+for i in ../*.utax
+do
+    BASE=$(basename $i .utax)
+    perl ../../../code/count_taxa_utax.pl --in $i --cutoff 20 >$BASE.count
+done
+#+END_SRC
+Now you have a list of counts per taxon for each sample.
+To aggregate the counts of all samples into a common matrix and to create files for phyloseq use the following commands:
+#+BEGIN_SRC bash :dir raw/utax/counts
+perl ../../../code/aggregate_counts.pl *.count >utax_aggregated_counts.tsv
+perl -pe 's/^([^\t]+)_(\d+)\t/TID_$2\t/' aggregated_counts.tsv >utax_otu_table
+perl -ne 'if(/^([^\t]+)_(\d+)\t/){print "TID_$2\t"; $tax=$1; $tax=~s/_\d+,/\t/g; $tax=~s/__sub__/__/g; $tax=~s/__super__/__/g; print "$tax\n"; }' aggregated_counts.tsv >utax_tax_table
+#+END_SRC
+The files
+ - utax_aggregated_counts.tsv
+ - utax_otu_table
+ - utax_tax_table
+are included in the precomputed folder
 **** RDP classifier
 In the raw folder create a subfolder rdp and execute the following commands:
 #+BEGIN_SRC bash :dir raw/rdp
@@ -172,5 +192,25 @@ do
 done
 #+END_SRC
 This way you end up with a .rdp file for each sample containing the RDP classification.
-*** Species accumulation curves
+Create a subfolder called counts and there execute this:
+#+BEGIN_SRC bash :dir raw/rdp/counts
+for i in ../*.rdp
+do
+    BASE=$(basename $i .rdp)
+    perl ../../../code/count_taxa_rdp.pl --in $i --cutoff 0.85 >$BASE.count
+done
+#+END_SRC
+Now you have a list of counts per taxon for each sample.
+To aggregate the counts of all samples into a common matrix and to create files for phyloseq use the following commands:
+#+BEGIN_SRC bash :dir raw/rdp/counts
+perl ../../../code/aggregate_counts.pl *.count >rdp_aggregated_counts.tsv
+perl -pe 's/^([^\t]+)_(\d+)\t/TID_$2\t/' aggregated_counts.tsv >rdp_otu_table
+perl -ne 'if(/^([^\t]+)_(\d+)\t/){print "TID_$2\t"; $tax=$1; $tax=~s/_\d+,/\t/g; $tax=~s/__sub__/__/g; $tax=~s/__super__/__/g; print "$tax\n"; }' aggregated_counts.tsv >rdp_tax_table
+#+END_SRC
+The files
+ - rdp_aggregated_counts.tsv
+ - rdp_otu_table
+ - rdp_tax_table
+are included in the precomputed folder
+*** TODO Species accumulation curves
 *** TODO Comparison of utax and RDP
