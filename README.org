@@ -172,8 +172,8 @@ Now you have a list of counts per taxon for each sample.
 To aggregate the counts of all samples into a common matrix and to create files for phyloseq use the following commands:
 #+BEGIN_SRC bash :dir raw/utax/counts
 perl ../../../code/aggregate_counts.pl *.count >utax_aggregated_counts.tsv
-perl -pe 's/^([^\t]+)_(\d+)\t/TID_$2\t/' aggregated_counts.tsv >utax_otu_table
-perl -ne 'if(/^([^\t]+)_(\d+)\t/){print "TID_$2\t"; $tax=$1; $tax=~s/_\d+,/\t/g; $tax=~s/__sub__/__/g; $tax=~s/__super__/__/g; print "$tax\n"; }' aggregated_counts.tsv >utax_tax_table
+perl -pe 's/^([^\t]+)_(\d+)\t/TID_$2\t/' utax_aggregated_counts.tsv >utax_otu_table
+perl -ne 'if(/^([^\t]+)_(\d+)\t/){print "TID_$2\t"; $tax=$1; $tax=~s/_\d+,/\t/g; $tax=~s/__sub__/__/g; $tax=~s/__super__/__/g; print "$tax\n"; }' utax_aggregated_counts.tsv >utax_tax_table
 #+END_SRC
 The files
  - utax_aggregated_counts.tsv
@@ -204,8 +204,8 @@ Now you have a list of counts per taxon for each sample.
 To aggregate the counts of all samples into a common matrix and to create files for phyloseq use the following commands:
 #+BEGIN_SRC bash :dir raw/rdp/counts
 perl ../../../code/aggregate_counts.pl *.count >rdp_aggregated_counts.tsv
-perl -pe 's/^([^\t]+)_(\d+)\t/TID_$2\t/' aggregated_counts.tsv >rdp_otu_table
-perl -ne 'if(/^([^\t]+)_(\d+)\t/){print "TID_$2\t"; $tax=$1; $tax=~s/_\d+,/\t/g; $tax=~s/__sub__/__/g; $tax=~s/__super__/__/g; print "$tax\n"; }' aggregated_counts.tsv >rdp_tax_table
+perl -pe 's/^([^\t]+)_(\d+)\t/TID_$2\t/' rdp_aggregated_counts.tsv >rdp_otu_table
+perl -ne 'if(/^([^\t]+)_(\d+)\t/){print "TID_$2\t"; $tax=$1; $tax=~s/_\d+,/\t/g; $tax=~s/__sub__/__/g; $tax=~s/__super__/__/g; print "$tax\n"; }' rdp_aggregated_counts.tsv >rdp_tax_table
 #+END_SRC
 The files
  - rdp_aggregated_counts.tsv
