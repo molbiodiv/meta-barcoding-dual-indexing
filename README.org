@@ -18,4 +18,24 @@ If you get substantially different results (e.g. using other versions/tools) fee
 You can also do so by opening an Issue here on GitHub.
 ** Hardware
 ** Third party tools
+ - [[http://its2.bioapps.biozentrum.uni-wuerzburg.de/][ITS2 database]] (Version 4.0.0 and inofficial release (included))
+ - UTAX 
+ - RDPclassifier 
+ - NCBI::Taxonomy - perl module
 ** Scripts
+
+* Workflow
+** Preparation of Reference Database
+*** Data
+The ITS2 sequences can be retrieved from the ITS2 database.
+The previous reference db consisted of all "Direct folds & Homology modeled" sequences from "Viridiplantae" (db version v4.0.0, 2011).
+This file is included for comparison.
+The new reference database consists of all sequences from "Viridiplantae" of an inofficial ITS2 database release (2014).
+This file is also included in this repository.
+*** Taxonomic assignment
+*** UTAX training
+*** RDP training
+** Analysis of Pollen Samples
+*** Preprocessing
+*** Classification
+*** Species accumulation curves
