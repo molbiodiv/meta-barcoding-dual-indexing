@@ -29,6 +29,7 @@ Only the RDP training was performed on a machine with more RAM available.
  - [[https://github.com/greatfireball/NCBI-Taxonomy/tree/v0.70.5][NCBI::Taxonomy]] - perl module (Version v0.70.5, [[http://dx.doi.org/10.5281/zenodo.17375][doi:10.5281/zenodo.17375]])
  - [[http://www.r-project.org/][R]] (Version 3.1.2 (2014-10-31) -- "Pumpkin Helmet", Platform: x86_64-pc-linux-gnu (64-bit))
  - [[https://www.perl.org/][perl]] (Version v5.20.2 built for x86_64-linux-gnu-thread-multi)
+ - [[http://qiime.org/][QIIME]] (Version 1.8.0+dfsg-4)
 
 * Workflow
 ** Preparation of Reference Database
@@ -107,10 +108,69 @@ And the folder rdp_trained including five files:
  - rdp_trained/wordConditionalProbIndexArr.txt
  - rdp_trained/logWordPrior.txt
 Those are the files required for RDP classification and are included as a tar.gz file in training/rdp
-*** Species coverage
+
+Now you have everything you need to classify sequences with either RDP classifier or UTAX.
+*** TODO Comparison of new database to old
 ** Analysis of Pollen Samples
 *** Data
-Download data from [[http://www.ebi.ac.uk/][EBI]] SRA repository project accession number PRJEB8640.
+Create a folder called raw and download data from [[http://www.ebi.ac.uk/][EBI]] SRA repository project accession number PRJEB8640.
+Extract into separate .fastq files (two for each sample).
+I assume your directory contains all the samples in the following form:
+<SampleName>_S<SampleNr>_L001_R<1|2>_001.fastq e.g. PoJ1_S1_L001_R1_001.fastq
+Where R1 is the file containing forward reads and R2 the file containing reverse reads for each sample.
 *** Preprocessing
+**** joining
+In the raw folder create a subfolder joined and execute the following commands
+#+BEGIN_SRC bash :dir raw/joined
+qiime
+for i in "../*_R1_001.fastq"
+do
+    BASE=$(basename $i _R1_001.fastq)
+    join_paired_ends.py -f $i -r ../${BASE}_R2_001.fastq -o $BASE
+done
+#+END_SRC
+This creates a folder for each sample in the form <SampleName>_S<SampleNr>_L001 containing three files:
+ - fastqjoin.join.fastq
+ - fastqjoin.un1.fastq
+ - fastqjoin.un2.fastq
+**** Q20 filtering
+In the raw folder create a subfolder filtered and execute the following commands
+#+BEGIN_SRC bash :dir raw/filtered
+for i in ../joined/*
+do
+    BASE=$(basename $i)
+    usearch8 -fastq_filter $i/fastqjoin.join.fastq\
+     -fastq_truncqual 19 -fastq_minlen 150 -fastqout $BASE.q20.fq
+done
+#+END_SRC
+Now you have one .fq file for each sample in the following form <SampleName>_S<SampleNr>_L001.q20.fq
+with joined and quality filtered reads.
 *** Classification
+**** UTAX
+In the raw folder create a subfolder utax and execute the following commands:
+You can use viridiplantae_all_2014.utax.udb instead of viridiplantae_all_2014.utax.fa
+if you generated the udb file in the previous steps.
+#+BEGIN_SRC bash :dir raw/utax
+for i in $(find ../filtered -name "*.fq")
+do   
+    BASE=$(basename $i .fq)
+    usearch8 -utax $i -db ../../training/utax/viridiplantae_all_2014.utax.udb\
+     -utax_rawscore -tt ../../training/utax/viridiplantae_all.utax.tax\
+     -utaxout $BASE.utax
+done 
+#+END_SRC
+This way you end up with a .utax file for each sample containing the utax classification.
+**** RDP classifier
+In the raw folder create a subfolder rdp and execute the following commands:
+#+BEGIN_SRC bash :dir raw/rdp
+for i in $(find ../filtered -name "*.fq")
+do
+    BASE=$(basename i1 .fq)
+    java -jar classifier.jar classify\
+     --train_propfile ../../training/rdp/rdp_trained/its2.properties\
+     --outputFile $BASE.rdp $i
+done
+#+END_SRC
+This way you end up with a .rdp file for each sample containing the RDP classification.
 *** Species accumulation curves
+*** TODO Comparison of utax and RDP
