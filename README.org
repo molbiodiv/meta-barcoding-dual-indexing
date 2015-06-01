@@ -111,6 +111,7 @@ Those are the files required for RDP classification and are included as a tar.gz
 
 Now you have everything you need to classify sequences with either RDP classifier or UTAX.
 *** TODO Comparison of new database to old
+*** TODO BISON coverage
 ** Analysis of Pollen Samples
 *** Data
 Create a folder called raw and download data from [[http://www.ebi.ac.uk/][EBI]] SRA repository project accession number PRJEB8640.
@@ -145,6 +146,7 @@ done
 #+END_SRC
 Now you have one .fq file for each sample in the following form <SampleName>_S<SampleNr>_L001.q20.fq
 with joined and quality filtered reads.
+*** TODO Read counts
 *** Classification
 **** UTAX
 In the raw folder create a subfolder utax and execute the following commands:
@@ -214,3 +216,4 @@ The files
 are included in the precomputed folder
 *** TODO Species accumulation curves
 *** TODO Comparison of utax and RDP
+*** TODO Comparison to flowering data
