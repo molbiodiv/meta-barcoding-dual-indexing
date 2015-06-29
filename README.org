@@ -41,6 +41,11 @@ The new reference database consists of all sequences from "Viridiplantae" of an 
 This [[data/viridiplantae_all_2014.fasta][file]] is also included in this repository.
 *** Taxonomic assignment
 Assign NCBI taxonomy on kingdom, phylum, class, order, family, genus and species level by mapping gi to taxid.
+
+*ATTENTION:* Results of the taxonomic assignment may vary depending on the date of calculation as
+NCBI Taxonoy is continuously revised. The viridiplantae_all_2014 dataset was processed on <2015-05-28 Do>
+and the viridiplantae_folds_2011 dataset on <2015-06-29 Mo>.
+
 Create an analysis folder and execute the following commands there (you need the NCBI::Taxonomy module for this):
 #+BEGIN_SRC bash :dir analysis
 grep "^>" ../data/viridiplantae_all_2014.fasta |
@@ -50,12 +55,26 @@ perl ../code/gi2taxonomy.pl\
  --out viridiplantae_all_2014.tax\
  --species viridiplantae_all_2014.species.taxids\
  --genus viridiplantae_all_2014.genus.taxids 
+
+# This is only needed for comparison of the old reference db to the new one
+grep "^>" ../data/viridiplantae_folds_2011.fasta |
+ perl -pe 's/^>(\d+).*/$1/' >viridiplantae_folds_2011.gis
+perl ../code/gi2taxonomy.pl\
+ --gis viridiplantae_folds_2011.gis\
+ --out viridiplantae_folds_2011.tax\
+ --species viridiplantae_folds_2011.species.taxids\
+ --genus viridiplantae_folds_2011.genus.taxids
 #+END_SRC
 This generates the following files:
  - viridiplantae_all_2014.gis
  - viridiplantae_all_2014.tax
  - viridiplantae_all_2014.species.taxids
  - viridiplantae_all_2014.genus.taxids
+and
+ - viridiplantae_folds_2011.gis
+ - viridiplantae_folds_2011.tax
+ - viridiplantae_folds_2011.species.taxids
+ - viridiplantae_folds_2011.genus.taxids
 All of those are also included in the precomputed folder.
 *** UTAX and RDP training
 The following commands executed in the analysis folder generate the required fasta and tax files for RDP and UTAX:
@@ -110,7 +129,51 @@ And the folder rdp_trained including five files:
 Those are the files required for RDP classification and are included as a tar.gz file in training/rdp
 
 Now you have everything you need to classify sequences with either RDP classifier or UTAX.
-*** TODO Comparison of new database to old
+*** Comparison of new database to old
+**** Sequence increase
+The number of sequences 2011 and 2014 can be calculated by using grep on header lines in the fasta files:
+#+BEGIN_SRC sh
+old=$(grep -c "^>" data/viridiplantae_folds_2011.fasta)
+new=$(grep -c "^>" data/viridiplantae_all_2014.fasta)
+increase=$(echo "100*$new/$old - 100" | bc -l)
+echo "Sequences_2011: $old"
+echo "Sequences_2014: $new"
+echo "Increase: $increase%"
+#+END_SRC
+
+#+RESULTS:
+| Sequences_2011: |       73879 |
+| Sequences_2014: |      182505 |
+| Increase:       | 147.032309% |
+
+*ATTENTION:* You may notice the discrepancy between 73,879 and the 73,853 reported in the publication.
+The difference of 26 sequences is due to the fact that no taxonomy could be assigned to those 26 sequences 
+at the time of training (of the first reference database). Those sequences have therefore been excluded.
+
+Just to be sure:
+#+BEGIN_SRC sh
+echo "100*182505/73853 - 100" | bc -l
+#+END_SRC
+
+#+RESULTS:
+: 147.119277
+
+**** Species increase
+The number of species can be calculating by counting the lines in *.specis.taxids which is a uniq list.
+#+BEGIN_SRC sh
+old=$(cat precomputed/viridiplantae_folds_2011.species.taxids | wc -l)
+new=$(cat precomputed/viridiplantae_all_2014.species.taxids | wc -l)
+increase=$(echo "100*$new/$old - 100" | bc -l)
+echo "Species_2011: $old"
+echo "Species_2014: $new"
+echo "Increase: $increase%"
+#+END_SRC
+
+#+RESULTS:
+| Species_2011: |      37396 |
+| Species_2014: |      72325 |
+| Increase:     | 93.403037% |
+
 *** TODO BISON coverage
 ** Analysis of Pollen Samples
 *** Data
