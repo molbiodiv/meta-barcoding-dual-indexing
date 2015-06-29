@@ -141,7 +141,6 @@ echo "Sequences_2014: $new"
 echo "Increase: $increase%"
 #+END_SRC
 
-#+RESULTS:
 | Sequences_2011: |       73879 |
 | Sequences_2014: |      182505 |
 | Increase:       | 147.032309% |
@@ -155,7 +154,6 @@ Just to be sure:
 echo "100*182505/73853 - 100" | bc -l
 #+END_SRC
 
-#+RESULTS:
 : 147.119277
 
 **** Species increase
@@ -169,7 +167,6 @@ echo "Species_2014: $new"
 echo "Increase: $increase%"
 #+END_SRC
 
-#+RESULTS:
 | Species_2011: |      37396 |
 | Species_2014: |      72325 |
 | Increase:     | 93.403037% |
