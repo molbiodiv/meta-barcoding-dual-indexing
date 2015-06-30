@@ -216,14 +216,15 @@ echo Bavaria Species 2011 $(echo "100 * $COMMON_OLD/$SPECIES_BAVARIA" | bc -l)%
 GENERA_BAVARIA=$(cat flora_bavaria/bayern.genus.taxids | wc -l)
 COMMON_OLD=$(cat viridiplantae_folds_2011.genus.taxids flora_bavaria/bayern.genus.taxids | sort | uniq -d | wc -l)
 COMMON_NEW=$(cat viridiplantae_all_2014.genus.taxids flora_bavaria/bayern.genus.taxids | sort | uniq -d | wc -l)
-echo Bavaria Genus 2014 $(echo "100 * $COMMON_NEW/$SPECIES_BAVARIA" | bc -l)%
-echo Bavaria Genus 2011 $(echo "100 * $COMMON_OLD/$SPECIES_BAVARIA" | bc -l)%
+echo Bavaria Genus 2014 $(echo "100 * $COMMON_NEW/$GENERA_BAVARIA" | bc -l)%
+echo Bavaria Genus 2011 $(echo "100 * $COMMON_OLD/$GENERA_BAVARIA" | bc -l)%
 #+END_SRC
 
 | Bavaria | Species | 2014 | 80.098684% |
 | Bavaria | Species | 2011 | 53.179824% |
-| Bavaria | Genus   | 2014 | 34.100877% |
-| Bavaria | Genus   | 2011 | 28.289473% |
+| Bavaria | Genus   | 2014 | 90.406976% |
+| Bavaria | Genus   | 2011 | 75.000000% |
+***** USA
 
 *** TODO Number of genera per order (Supplemental File 2)
 ** Analysis of Pollen Samples
