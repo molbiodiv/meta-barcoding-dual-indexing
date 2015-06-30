@@ -39,6 +39,8 @@ The previous reference db consisted of all "Direct folds & Homology modeled" seq
 This [[data/viridiplantae_folds_2011.fasta][file]] is included for comparison.
 The new reference database consists of all sequences from "Viridiplantae" of an inofficial ITS2 database release (2014).
 This [[data/viridiplantae_all_2014.fasta][file]] is also included in this repository.
+There is also a even more recent reference database available consisting of all sequences from "Viridiplantae" of a not yet official ITS2 database release (2015).
+This [[data/viridiplantae_all_2015.fasta][file]] is also included in this repository.
 *** Taxonomic assignment
 Assign NCBI taxonomy on kingdom, phylum, class, order, family, genus and species level by mapping gi to taxid.
 
@@ -64,6 +66,17 @@ perl ../code/gi2taxonomy.pl\
  --out viridiplantae_folds_2011.tax\
  --species viridiplantae_folds_2011.species.taxids\
  --genus viridiplantae_folds_2011.genus.taxids
+
+# There is already a more current version of the ITS2 database available
+# This has not been used in the analyses
+grep "^>" ../data/viridiplantae_all_2015.fasta |
+ perl -pe 's/^>(\d+).*/$1/' >viridiplantae_all_2015.gis
+perl ../code/gi2taxonomy.pl\
+ --gis viridiplantae_all_2015.gis\
+ --out viridiplantae_all_2015.tax\
+ --species viridiplantae_all_2015.species.taxids\
+ --genus viridiplantae_all_2015.genus.taxids 
+
 #+END_SRC
 This generates the following files:
  - viridiplantae_all_2014.gis
@@ -75,6 +88,11 @@ and
  - viridiplantae_folds_2011.tax
  - viridiplantae_folds_2011.species.taxids
  - viridiplantae_folds_2011.genus.taxids
+and
+ - viridiplantae_all_2015.gis
+ - viridiplantae_all_2015.tax
+ - viridiplantae_all_2015.species.taxids
+ - viridiplantae_all_2015.genus.taxids
 All of those are also included in the precomputed folder.
 *** UTAX and RDP training
 The following commands executed in the analysis folder generate the required fasta and tax files for RDP and UTAX:
@@ -167,9 +185,9 @@ echo "Species_2014: $new"
 echo "Increase: $increase%"
 #+END_SRC
 
-| Species_2011: |      37396 |
+| Species_2011: |      37403 |
 | Species_2014: |      72325 |
-| Increase:     | 93.403037% |
+| Increase:     | 93.366842% |
 
 *** Bavaria/USA coverage
 **** Retrieval of checklists
@@ -221,13 +239,13 @@ echo Bavaria Genus 2011 $(echo "100 * $COMMON_OLD/$GENERA_BAVARIA" | bc -l)%
 #+END_SRC
 
 | Bavaria | Species | 2014 | 80.098684% |
-| Bavaria | Species | 2011 | 53.179824% |
+| Bavaria | Species | 2011 | 53.125000% |
 | Bavaria | Genus   | 2014 | 90.406976% |
 | Bavaria | Genus   | 2011 | 75.000000% |
 ***** USA
 To get a list of species and genus coverage for each state execute the following in the analysis folder:
 #+BEGIN_SRC sh :dir analysis
-(echo -e "Fips\tSpecState\tSpec2011\tSpec2014\tGenusState\tGenus2011\tGenus2014"
+(echo -e "Fips\tSpecState\tSpec2011\tSpec2014\tSpec2015\tGenusState\tGenus2011\tGenus2014\tGenus2015"
 for i in $(seq 1 56)
 do  
     # Excludes 3, 7, 14, 43 and 52.
@@ -242,7 +260,9 @@ do
     COMMON_GENUS_2011=$(cat viridiplantae_folds_2011.genus.taxids flora_usa/$i.genus.taxids | sort | uniq -d | wc -l)
     COMMON_SPEC_2014=$(cat viridiplantae_all_2014.species.taxids flora_usa/$i.species.taxids | sort | uniq -d | wc -l)
     COMMON_GENUS_2014=$(cat viridiplantae_all_2014.genus.taxids flora_usa/$i.genus.taxids | sort | uniq -d | wc -l)
-    echo -e "$i\t$STATE_SPEC\t$COMMON_SPEC_2011\t$COMMON_SPEC_2014\t$STATE_GENUS\t$COMMON_GENUS_2011\t$COMMON_GENUS_2014"
+    COMMON_SPEC_2015=$(cat viridiplantae_all_2015.species.taxids flora_usa/$i.species.taxids | sort | uniq -d | wc -l)
+    COMMON_GENUS_2015=$(cat viridiplantae_all_2015.genus.taxids flora_usa/$i.genus.taxids | sort | uniq -d | wc -l)
+    echo -e "$i\t$STATE_SPEC\t$COMMON_SPEC_2011\t$COMMON_SPEC_2014\t$COMMON_SPEC_2015\t$STATE_GENUS\t$COMMON_GENUS_2011\t$COMMON_GENUS_2014\t$COMMON_GENUS_2015"
 done) >flora_usa/states.common.tsv
 #+END_SRC
 This creates the file
@@ -256,14 +276,27 @@ print(summary(data$Spec2014/data$SpecState))
 print(summary(data$Genus2014/data$GenusState))
 #+END_SRC
 
-|         |   Min. | 1st Qu. | Median |   Mean | 3rd Qu. |   Max. |
-|---------+--------+---------+--------+--------+---------+--------|
-| Species | 0.6652 |  0.7501 | 0.7611 | 0.7566 |  0.7678 | 0.7911 |
-| Genera  | 0.7380 |  0.8316 | 0.8492 | 0.8408 |  0.8577 | 0.8730 |
+|                  |   Min. | 1st Qu. | Median |   Mean | 3rd Qu. |   Max. |
+|------------------+--------+---------+--------+--------+---------+--------|
+| Species coverage | 0.6652 |  0.7504 | 0.7605 | 0.7555 |  0.7658 | 0.7911 |
+| Genera coverage  | 0.7380 |  0.8310 | 0.8490 | 0.8404 |  0.8575 | 0.8730 |
 
 Small discrepancies between the numbers reported in the publication
 and those reporduced here are due to different dates of data retrieval from BISON.
 *** TODO Number of genera per order (Supplemental File 2)
+The number of genera per order in the old reference database and the new one were calculated with the following commands:
+#+BEGIN_SRC sh
+cat viridiplantae_folds_2011.tax | grep "Viridiplantae" | perl -pe 's/.*(o__[^;]+);.*(g__[^;]+);.*/$1\t$2/' | sort -u | grep -v undef | datamash -g 1 count 2 >2011_genera_per_order
+cat viridiplantae_all_2015.tax | grep "Viridiplantae" | perl -pe 's/.*(o__[^;]+);.*(g__[^;]+);.*/$1\t$2/' | sort -u | grep -v undef | datamash -g 1 count 2 >2015_genera_per_order
+echo -e "Order\ttaxid\told\tnew" >increase_genera_per_order.tsv
+join -t$'\t' -a1 2015_genera_per_order 2011_genera_per_order | perl -pe 's/^([^\s]+\t\d+)$/$1\t0/' | perl -F"\t" -ane 'chomp $F[2];print "$F[0]\t$F[2]\t$F[1]\n"' | sed 's/o__//;s/_/\t/' >>increase_genera_per_order.tsv
+join -t$'\t' -v2 2015_genera_per_order 2011_genera_per_order | perl -pe 's/\n/\t0\n/;s/o__//;s/_/\t/' >>increase_genera_per_order.tsv
+#+END_SRC
+The created files:
+ - 2011_genera_per_order
+ - 2015_genera_per_order
+ - increase_genera_per_order.tsv
+are included in the precomputed folder.
 ** Analysis of Pollen Samples
 *** Data
 Create a folder called raw and download data from [[http://www.ebi.ac.uk/][EBI]] SRA repository project accession number PRJEB8640.
