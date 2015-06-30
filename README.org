@@ -171,7 +171,61 @@ echo "Increase: $increase%"
 | Species_2014: |      72325 |
 | Increase:     | 93.403037% |
 
-*** TODO BISON coverage
+*** TODO Bavaria/BISON coverage
+**** Retrieval of checklists
+To assess the completeness of species and genera in the reference database in respect to known plant species in Bavaria and the USA
+lists of taxa were obtained from [[http://www.bayernflora.de/][bayernflora.de]] (<2015-01-30 Fr>) and [[http://bison.usgs.ornl.gov][BISON]] (<2015-02-13 Fr>).
+In the analysis folder execute the following commands:
+#+BEGIN_SRC sh :dir analysis
+mkdir flora_bavaria flora_usa
+cd flora_bavaria
+../../code/get_taxa_bayern.sh
+cd ../flora_usa
+../../code/get_taxa_bison.sh
+#+END_SRC
+
+This generates the following files in analysis/flora_bavaria
+ - bayern.genus.taxids
+ - bayern.genus.taxids.tsv
+ - bayern.genus.txt
+ - bayern.species.cleaned.taxids
+ - bayern.species.cleaned.taxids.tsv
+ - bayern.species.cleaned.txt
+ - bayern.species.taxids.tsv
+ - bayern.species.txt
+
+And for each state of the USA the following files in analysis/flora_usa
+ - <fips>.checklist
+ - <fips>.genus
+ - <fips>.genus.taxids
+ - <fips>.genus.tsv
+ - <fips>.species
+ - <fips>.species.taxids
+ - <fips>.species.tsv
+
+The results may vary depending on the date of data retrieval, 
+therefore those files as used in the publication are included in the precomputed folder.
+**** Comparisons of checklists to reference database
+***** Bavaria
+#+BEGIN_SRC sh :dir precomputed
+SPECIES_BAVARIA=$(cat flora_bavaria/bayern.species.cleaned.taxids | wc -l)
+COMMON_OLD=$(cat viridiplantae_folds_2011.species.taxids flora_bavaria/bayern.species.cleaned.taxids | sort | uniq -d | wc -l)
+COMMON_NEW=$(cat viridiplantae_all_2014.species.taxids flora_bavaria/bayern.species.cleaned.taxids | sort | uniq -d | wc -l)
+echo Bavaria Species 2014 $(echo "100 * $COMMON_NEW/$SPECIES_BAVARIA" | bc -l)%
+echo Bavaria Species 2011 $(echo "100 * $COMMON_OLD/$SPECIES_BAVARIA" | bc -l)%
+GENERA_BAVARIA=$(cat flora_bavaria/bayern.genus.taxids | wc -l)
+COMMON_OLD=$(cat viridiplantae_folds_2011.genus.taxids flora_bavaria/bayern.genus.taxids | sort | uniq -d | wc -l)
+COMMON_NEW=$(cat viridiplantae_all_2014.genus.taxids flora_bavaria/bayern.genus.taxids | sort | uniq -d | wc -l)
+echo Bavaria Genus 2014 $(echo "100 * $COMMON_NEW/$SPECIES_BAVARIA" | bc -l)%
+echo Bavaria Genus 2011 $(echo "100 * $COMMON_OLD/$SPECIES_BAVARIA" | bc -l)%
+#+END_SRC
+
+| Bavaria | Species | 2014 | 80.098684% |
+| Bavaria | Species | 2011 | 53.179824% |
+| Bavaria | Genus   | 2014 | 34.100877% |
+| Bavaria | Genus   | 2011 | 28.289473% |
+
+*** TODO Number of genera per order (Supplemental File 2)
 ** Analysis of Pollen Samples
 *** Data
 Create a folder called raw and download data from [[http://www.ebi.ac.uk/][EBI]] SRA repository project accession number PRJEB8640.
