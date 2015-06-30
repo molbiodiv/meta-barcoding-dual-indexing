@@ -283,7 +283,7 @@ print(summary(data$Genus2014/data$GenusState))
 
 Small discrepancies between the numbers reported in the publication
 and those reporduced here are due to different dates of data retrieval from BISON.
-*** TODO Number of genera per order (Supplemental File 2)
+*** Number of genera per order (Supplement)
 The number of genera per order in the old reference database and the new one were calculated with the following commands:
 #+BEGIN_SRC sh
 cat viridiplantae_folds_2011.tax | grep "Viridiplantae" | perl -pe 's/.*(o__[^;]+);.*(g__[^;]+);.*/$1\t$2/' | sort -u | grep -v undef | datamash -g 1 count 2 >2011_genera_per_order
