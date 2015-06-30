@@ -171,7 +171,7 @@ echo "Increase: $increase%"
 | Species_2014: |      72325 |
 | Increase:     | 93.403037% |
 
-*** TODO Bavaria/BISON coverage
+*** Bavaria/USA coverage
 **** Retrieval of checklists
 To assess the completeness of species and genera in the reference database in respect to known plant species in Bavaria and the USA
 lists of taxa were obtained from [[http://www.bayernflora.de/][bayernflora.de]] (<2015-01-30 Fr>) and [[http://bison.usgs.ornl.gov][BISON]] (<2015-02-13 Fr>).
@@ -204,7 +204,7 @@ And for each state of the USA the following files in analysis/flora_usa
  - <fips>.species.tsv
 
 The results may vary depending on the date of data retrieval, 
-therefore those files as used in the publication are included in the precomputed folder.
+therefore those files are included in the precomputed folder.
 **** Comparisons of checklists to reference database
 ***** Bavaria
 #+BEGIN_SRC sh :dir precomputed
@@ -225,7 +225,44 @@ echo Bavaria Genus 2011 $(echo "100 * $COMMON_OLD/$GENERA_BAVARIA" | bc -l)%
 | Bavaria | Genus   | 2014 | 90.406976% |
 | Bavaria | Genus   | 2011 | 75.000000% |
 ***** USA
+To get a list of species and genus coverage for each state execute the following in the analysis folder:
+#+BEGIN_SRC sh :dir analysis
+(echo -e "Fips\tSpecState\tSpec2011\tSpec2014\tGenusState\tGenus2011\tGenus2014"
+for i in $(seq 1 56)
+do  
+    # Excludes 3, 7, 14, 43 and 52.
+    if [ "$i" -eq 3 ] || [ "$i" -eq 7 ] || [ "$i" -eq 14 ] || [ "$i" -eq 43 ] || [ "$i" -eq 52 ]
+    then
+        continue      # Those fips are not used
+    fi
+    i=$(printf "%02d" $i)
+    STATE_SPEC=$(cat flora_usa/$i.species.taxids | wc -l)
+    STATE_GENUS=$(cat flora_usa/$i.genus.taxids | wc -l)
+    COMMON_SPEC_2011=$(cat viridiplantae_folds_2011.species.taxids flora_usa/$i.species.taxids | sort | uniq -d | wc -l)
+    COMMON_GENUS_2011=$(cat viridiplantae_folds_2011.genus.taxids flora_usa/$i.genus.taxids | sort | uniq -d | wc -l)
+    COMMON_SPEC_2014=$(cat viridiplantae_all_2014.species.taxids flora_usa/$i.species.taxids | sort | uniq -d | wc -l)
+    COMMON_GENUS_2014=$(cat viridiplantae_all_2014.genus.taxids flora_usa/$i.genus.taxids | sort | uniq -d | wc -l)
+    echo -e "$i\t$STATE_SPEC\t$COMMON_SPEC_2011\t$COMMON_SPEC_2014\t$STATE_GENUS\t$COMMON_GENUS_2011\t$COMMON_GENUS_2014"
+done) >flora_usa/states.common.tsv
+#+END_SRC
+This creates the file
+ - flora_usa/states.common.tsv
+which is also included in the precomputed/flora_usa folder.
 
+This file is further analysed with R:
+#+BEGIN_SRC R :dir analysis/flora_usa
+data=read.table("states.common.tsv", header=T, sep="\t")
+print(summary(data$Spec2014/data$SpecState))
+print(summary(data$Genus2014/data$GenusState))
+#+END_SRC
+
+|         |   Min. | 1st Qu. | Median |   Mean | 3rd Qu. |   Max. |
+|---------+--------+---------+--------+--------+---------+--------|
+| Species | 0.6652 |  0.7501 | 0.7611 | 0.7566 |  0.7678 | 0.7911 |
+| Genera  | 0.7380 |  0.8316 | 0.8492 | 0.8408 |  0.8577 | 0.8730 |
+
+Small discrepancies between the numbers reported in the publication
+and those reporduced here are due to different dates of data retrieval from BISON.
 *** TODO Number of genera per order (Supplemental File 2)
 ** Analysis of Pollen Samples
 *** Data
