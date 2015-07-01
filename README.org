@@ -358,6 +358,7 @@ Now you have a list of counts per taxon for each sample.
 To aggregate the counts of all samples into a common matrix and to create files for phyloseq use the following commands:
 #+BEGIN_SRC bash :dir raw/utax/counts
 perl ../../../code/aggregate_counts.pl *.count >utax_aggregated_counts.tsv
+perl -i -pe 's/(PoJ\d+)_S\d+_L001\.q20\.count/$1/g' utax_aggregated_counts.tsv
 perl -pe 's/^([^\t]+)_(\d+)\t/TID_$2\t/' utax_aggregated_counts.tsv >utax_otu_table
 perl -ne 'if(/^([^\t]+)_(\d+)\t/){print "TID_$2\t"; $tax=$1; $tax=~s/_\d+,/\t/g; $tax=~s/__sub__/__/g; $tax=~s/__super__/__/g; print "$tax\n"; }' utax_aggregated_counts.tsv >utax_tax_table
 #+END_SRC
