@@ -434,6 +434,63 @@ sd(colSums(otu))
 |     Sum |  Mean |   SD | Median |
 | 5984543 | 15580 | 6598 |  15740 |
 
-*** TODO Species accumulation curves
-*** TODO Comparison of utax and RDP
+*** Species accumulation curves
+The following R code can be used to create the species accumulation curves:
+#+BEGIN_SRC R :dir analysis
+library(vegan)
+library(phyloseq)
+data = read.table("utax_otu_table", sep="\t", header=T, row.names=1)
+map = import_qiime_sample_data("../data/mapFile.txt")
+otu = otu_table(data, taxa_are_rows=T)
+otu_rel = transform_sample_counts(otu, function(x) x/sum(x))
+otu_table(otu)[otu_table(otu_rel)<0.001]<-0
+phy = merge_phyloseq(otu, map)
+
+trunc = subset_samples(phy, BeeSpecies == "H.truncorum")
+rufa = subset_samples(phy, BeeSpecies == "O.rufa")
+
+veganotu <- function(physeq) {
+    require("vegan")
+    OTU <- otu_table(physeq)
+    if (taxa_are_rows(OTU)) {
+        OTU <- t(OTU)
+    }
+    return(as(OTU, "matrix"))
+}
+
+trunc.v = veganotu(trunc)
+rufa.v = veganotu(rufa)
+
+pdf("Figure2.pdf")
+par(mfrow =c(1,2))
+par(mar=c(3,3,1,1)+0.1, pin= c(2.73, 2.73))
+rarecurve(rufa.v, step = 1, xlab = "", ylab = "",label = FALSE, xlim =c(-0.2, 5000), ylim = c(-0.2, 90), lwd = 0.5)
+title(ylab = "No. Taxa", line= 2)
+title(xlab = "Sequencing Depth [reads]", line = 2)
+text(x = 100, y = 87, "a", cex = 2)
+
+rarecurve(trunc.v, step = 1, xlab = "", ylab = "", label = FALSE, xlim = c(-0.2, 5000), ylim = c(-0.2, 90), lwd = 0.5)
+title(ylab = "No. Taxa", line= 2)
+title(xlab = "Sequencing Depth [reads]", line = 2)
+text(x=100, y = 87, "b", cex = 2)
+dev.off()
+#+END_SRC
+The created figure:
+ - [[file:precomputed/Figure2.pdf][Figure2.pdf]]
+is also included in the precomputed folder.
+*** Comparison of utax and RDP
+This code executed in the analysis folder compares the assignment of RDP and UTAX on the genus level (ignoring confidence values):
+#+BEGIN_SRC sh :dir analysis
+pv rdp/*.rdp | cut -f1,21 | grep -v undef | perl -pe 's/g__//;s/_/\t/' | sort -k 1b,1 >PoJ.genus.rdp
+pv utax/*.utax | perl -pe 's/,/\t/g' | cut -f1,7 | grep -v undef | perl -pe 's/g__//;s/\(.*\)//;s/_/\t/' | sort -k 1b,1 >PoJ.genus.utax
+
+echo "100 * " $(join PoJ.genus.rdp PoJ.genus.utax | cut -f2,4 -d" " | perl -F"\s" -ane '$g++;chomp $F[1];$c++ if($F[0] eq $F[1]);END{$e=$c/$g;print "$c / ( $g + "}') $(join PoJ.genus.rdp PoJ.genus.utax -v1 | wc -l) " + " $(join PoJ.genus.rdp PoJ.genus.utax -v2 | wc -l) ")" | bc -l
+#+END_SRC
+
+: 90.286078
+
+The two files:
+ - PoJ.genus.rdp
+ - PoJ.genus.utax
+are also included in the precomputed folder.
 *** TODO Comparison to flowering data
