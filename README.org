@@ -493,4 +493,42 @@ The two files:
  - PoJ.genus.rdp.gz
  - PoJ.genus.utax.gz
 are also included in the precomputed folder (as gzipped archives).
-*** TODO Comparison to flowering data
+*** Comparison to flowering data
+The file [[file:data/genera_flowering][data/genera_flowering]] contains a list of genera found near the sampling plots.
+The following R code calculates the fraction of reads in all samples (with rare taxa removed)
+that belong to genera listed in the genera_flowering file:
+#+BEGIN_SRC R :dir analysis
+library(phyloseq)
+otu = otu_table(read.table("utax_otu_table", sep="\t", header=T, row.names=1), taxa_are_rows=T)
+otu_rel = transform_sample_counts(otu, function(x) x/sum(x))
+# remove rare taxa from each sample in otu
+otu_table(otu)[otu_table(otu_rel)<0.001]<-0
+tax = tax_table(as.matrix(read.table("utax_tax_table", sep="\t", fill=T, row.names=1)))
+otu = merge_phyloseq(otu, tax)
+# remove taxa that have only 0 counts after rare filtering and restriction to PoJ
+otu_pruned = prune_taxa(rowSums(otu_table(otu))>0, otu)
+# accumulate at genus level (ignoring species names)
+otu_pruned_glom = tax_glom(otu_pruned, taxrank="V7")
+write.table(as.factor(tax_table(otu_pruned_glom)[,6]),file="utax_genera_pruned_glom",quote=F,row.names=F,col.names=F)
+flowering = c(read.table("../data/genera_flowering", stringsAsFactors=F))
+# Remove undefined genera from the total set
+otu_pruned_glom_noundef = subset_taxa(otu_pruned_glom, V7 != "g__undef_")
+flowering_genera = tax_table(otu_pruned_glom_noundef)[,6] %in% paste("g__",flowering$V1, sep="")
+100 * sum(otu_table(otu_pruned_glom_noundef)[flowering_genera,]) / sum(otu_table(otu_pruned_glom_noundef))
+#+END_SRC
+
+: 73.71091 %
+
+As a side product the file:
+ - utax_genera_pruned_glom
+was created (included in the precomputed folder).
+
+To determine the fraction of documented flowering genera also found in at least one of the samples
+the following code can be executed (analysis folder):
+#+BEGIN_SRC sh :dir analysis
+TOTAL=$(cat ../data/genera_flowering | wc -l)
+COMMON=$(cat ../data/genera_flowering <(perl -pe 's/^g__//' utax_genera_pruned_glom | grep -v undef_ | sort -u) | sort | uniq -d | wc -l)
+echo $COMMON" / "$TOTAL" = "$(echo "scale=0;100 * "$COMMON" / "$TOTAL | bc )"%"
+#+END_SRC
+
+: 98 / 201 = 48.7%
