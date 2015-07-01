@@ -331,7 +331,6 @@ done
 #+END_SRC
 Now you have one .fq file for each sample in the following form <SampleName>_S<SampleNr>_L001.q20.fq
 with joined and quality filtered reads.
-*** TODO Read counts
 *** Classification
 **** UTAX
 In the raw folder create a subfolder utax and execute the following commands:
@@ -399,6 +398,40 @@ The files
  - rdp_otu_table
  - rdp_tax_table
 are included in the precomputed folder
+*** Read counts
+The reads are directly counted on the fastq files with the following commands in the analysis folder:
+#+BEGIN_SRC sh :dir analysis
+grep -c "^+$" ../raw/*_R1_001.fastq | sed 's/..\/raw\///;s/_R1_001.fastq:/\t/' >read_count_raw.tsv
+echo -e "Sum\tMean\tSD\tMedian"
+cat read_count_raw.tsv | datamash sum 2 mean 2 sstdev 2 median 2
+#+END_SRC
+
+|      Sum |  Mean |    SD | Median |
+| 11624087 | 30271 | 11373 |  30900 |
+
+The created file:
+ - read_count_raw.tsv
+is also included in the precomputed folder.
+
+To get the counts for filtered reads (rare taxa removed) use this R code (in the analysis folder):
+#+BEGIN_SRC sh :dir analysis
+library(phyloseq)
+data = read.table("utax_otu_table", sep="\t", header=T, row.names=1)
+otu = otu_table(data, taxa_are_rows=T)
+otu_rel = transform_sample_counts(otu, function(x) x/sum(x))
+otu_table(otu)[otu_table(otu_rel)<0.001]<-0
+summary(colSums(otu))
+#   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#      7   11000   15740   15580   19650   36940 
+sum(colSums(otu))
+# [1] 5984543
+sd(colSums(otu))
+# [1] 6597.562
+#+END_SRC
+
+|     Sum |  Mean |   SD | Median |
+| 5984543 | 15580 | 6598 |  15740 |
+
 *** TODO Species accumulation curves
 *** TODO Comparison of utax and RDP
 *** TODO Comparison to flowering data
