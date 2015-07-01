@@ -153,15 +153,15 @@ The number of sequences 2011 and 2014 can be calculated by using grep on header 
 #+BEGIN_SRC sh
 old=$(grep -c "^>" data/viridiplantae_folds_2011.fasta)
 new=$(grep -c "^>" data/viridiplantae_all_2014.fasta)
-increase=$(echo "100*$new/$old - 100" | bc -l)
+increase=$(echo "scale=0;100*$new/$old - 100" | bc )
 echo "Sequences_2011: $old"
 echo "Sequences_2014: $new"
 echo "Increase: $increase%"
 #+END_SRC
 
-| Sequences_2011: |       73879 |
-| Sequences_2014: |      182505 |
-| Increase:       | 147.032309% |
+| Sequences_2011: |  73879 |
+| Sequences_2014: | 182505 |
+| Increase:       |   147% |
 
 *ATTENTION:* You may notice the discrepancy between 73,879 and the 73,853 reported in the publication.
 The difference of 26 sequences is due to the fact that no taxonomy could be assigned to those 26 sequences 
@@ -169,10 +169,10 @@ at the time of training (of the first reference database). Those sequences have 
 
 Just to be sure:
 #+BEGIN_SRC sh
-echo "100*182505/73853 - 100" | bc -l
+echo "scale=0;100*182505/73853 - 100" | bc 
 #+END_SRC
 
-: 147.119277
+: 147
 
 **** Species increase
 The number of species can be calculating by counting the lines in *.specis.taxids which is a uniq list.
