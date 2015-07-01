@@ -490,7 +490,7 @@ echo "100 * " $(join PoJ.genus.rdp PoJ.genus.utax | cut -f2,4 -d" " | perl -F"\s
 : 90.286078
 
 The two files:
- - PoJ.genus.rdp
- - PoJ.genus.utax
-are also included in the precomputed folder.
+ - PoJ.genus.rdp.gz
+ - PoJ.genus.utax.gz
+are also included in the precomputed folder (as gzipped archives).
 *** TODO Comparison to flowering data
