@@ -299,6 +299,74 @@ The created files:
  - 2015_genera_per_order
  - increase_genera_per_order.tsv
 are included in the precomputed folder.
+
+Creation of the latex table
+#+BEGIN_SRC sh
+cat <<EOF >additional_file2.tex
+\documentclass{article}
+\usepackage{tabu}
+\usepackage{longtable}
+\newcolumntype{R}{>{\raggedleft\arraybackslash}X}
+\usepackage{booktabs}
+
+\begin{document}
+
+\begin{longtabu}{lXRR}
+\caption*{Comparison of the number of genera per order for all orders.}\\\\
+\toprule
+Order & TaxID & Genera old & Genera new \\\\
+\midrule
+\endhead
+EOF
+
+join -t$'\t' -a1 2014_genera_per_order 2011_genera_per_order | perl -pe 's/^([^\s]+\t\d+)$/$1\t0/' | perl -F"\t" -ane 'chomp $F[2];print "$F[0]\t$F[2]\t$F[1]\n"' | sed 's/o__//;s/_/\t/;' | perl -pe 's/\t/ & /g;s/\n/\\\\\n/' >>additional_file2.tex
+join -t$'\t' -v2 2014_genera_per_order 2011_genera_per_order | perl -pe 's/\n/\t0\n/;s/o__//;s/_/\t/' | perl -pe 's/\t/ & /g;s/\n/\\\\\n/' >>additional_file2.tex
+
+cat <<EOF >>additional_file2.tex
+\bottomrule
+\end{longtabu}
+\end{document}
+EOF
+
+pdflatex additional_file2.tex
+pdflatex additional_file2.tex
+#+END_SRC
+**** Sequences for selected groups
+The increase of sequences for a number of selected groups can simply be determined by:
+#+BEGIN_SRC sh
+cat <<EOF >additional_file3.tex
+\documentclass{article}
+\usepackage{tabu}
+\usepackage{longtable}
+\newcolumntype{R}{>{\raggedleft\arraybackslash}X}
+\usepackage{booktabs}
+
+\begin{document}
+
+\begin{longtabu}{XRR}
+\caption*{Comparison of the number of sequences per group for selected taxonomic groups.}\\\\
+\toprule
+Group & old & new \\\\
+\midrule
+\endhead
+EOF
+
+echo "Vitaceae & "$(grep -c Vitaceae viridiplantae_folds_2011.tax)" & "$(grep -c Vitaceae viridiplantae_all_2014.tax) '\\\\' >>additional_file3.tex
+echo '\\'"textit{Heracleum} & "$(grep -c Heracleum viridiplantae_folds_2011.tax)" & "$(grep -c Heracleum viridiplantae_all_2014.tax) '\\\\' >>additional_file3.tex
+echo '\\'"textit{Carduus} & "$(grep -c Carduus viridiplantae_folds_2011.tax)" & "$(grep -c Carduus viridiplantae_all_2014.tax) '\\\\' >>additional_file3.tex
+echo '\\'"textit{Phacelia} & "$(grep -c Phacelia viridiplantae_folds_2011.tax)" & "$(grep -c Phacelia viridiplantae_all_2014.tax) '\\\\' >>additional_file3.tex
+echo '\\'"textit{Convolvulus} & "$(grep -c Convolvulus viridiplantae_folds_2011.tax)" & "$(grep -c Convolvulus viridiplantae_all_2014.tax) '\\\\' >>additional_file3.tex
+echo '\\'"textit{Helianthus} & "$(grep -c Helianthus viridiplantae_folds_2011.tax)" & "$(grep -c Helianthus viridiplantae_all_2014.tax) '\\\\' >>additional_file3.tex
+
+cat <<EOF >>additional_file3.tex
+\bottomrule
+\end{longtabu}
+\end{document}
+EOF
+
+pdflatex additional_file3.tex
+pdflatex additional_file3.tex
+#+END_SRC
 ** Analysis of Pollen Samples
 *** Data
 Create a folder called raw and download data from [[http://www.ebi.ac.uk/][EBI]] SRA repository project accession number PRJEB8640.
