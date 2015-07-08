@@ -67,15 +67,15 @@ perl ../code/gi2taxonomy.pl\
 
 #+END_SRC
 This generates the following files:
- - viridiplantae_all_2014.gis
- - viridiplantae_all_2014.tax
- - viridiplantae_all_2014.species.taxids
- - viridiplantae_all_2014.genus.taxids
+ - [[file:precomputed/viridiplantae_all_2014.gis][viridiplantae_all_2014.gis]]
+ - [[file:precomputed/viridiplantae_all_2014.tax][viridiplantae_all_2014.tax]]
+ - [[file:precomputed/viridiplantae_all_2014.species.taxids][viridiplantae_all_2014.species.taxids]]
+ - [[file:precomputed/viridiplantae_all_2014.genus.taxids][viridiplantae_all_2014.genus.taxids]]
 and
- - viridiplantae_folds_2011.gis
- - viridiplantae_folds_2011.tax
- - viridiplantae_folds_2011.species.taxids
- - viridiplantae_folds_2011.genus.taxids
+ - [[file:precomputed/viridiplantae_folds_2011.gis][viridiplantae_folds_2011.gis]]
+ - [[file:precomputed/viridiplantae_folds_2011.tax][viridiplantae_folds_2011.tax]]
+ - [[file:precomputed/viridiplantae_folds_2011.species.taxids][viridiplantae_folds_2011.species.taxids]]
+ - [[file:precomputed/viridiplantae_folds_2011.genus.taxids][viridiplantae_folds_2011.genus.taxids]]
 All of those are also included in the precomputed folder.
 *** UTAX and RDP training
 The following commands executed in the analysis folder generate the required fasta and tax files for RDP and UTAX:
