@@ -152,10 +152,10 @@ at the time of training (of the first reference database). Those sequences have 
 
 Just to be sure:
 #+BEGIN_SRC sh
-printf %.0f $(echo "100*182505/73853 - 100" | bc -l)
+printf %.0f%% $(echo "100*182505/73853 - 100" | bc -l)
 #+END_SRC
 
-: 147
+: 147%
 
 **** Species increase
 The number of species can be calculating by counting the lines in *.specis.taxids which is a uniq list.
@@ -536,10 +536,10 @@ This code executed in the analysis folder compares the assignment of RDP and UTA
 pv rdp/*.rdp | cut -f1,21 | grep -v undef | perl -pe 's/g__//;s/_/\t/' | sort -k 1b,1 >PoJ.genus.rdp
 pv utax/*.utax | perl -pe 's/,/\t/g' | cut -f1,7 | grep -v undef | perl -pe 's/g__//;s/\(.*\)//;s/_/\t/' | sort -k 1b,1 >PoJ.genus.utax
 
-echo "100 * " $(join PoJ.genus.rdp PoJ.genus.utax | cut -f2,4 -d" " | perl -F"\s" -ane '$g++;chomp $F[1];$c++ if($F[0] eq $F[1]);END{$e=$c/$g;print "$c / ( $g + "}') $(join PoJ.genus.rdp PoJ.genus.utax -v1 | wc -l) " + " $(join PoJ.genus.rdp PoJ.genus.utax -v2 | wc -l) ")" | bc -l
+printf %.1f%% $(echo "100 * " $(join PoJ.genus.rdp PoJ.genus.utax | cut -f2,4 -d" " | perl -F"\s" -ane '$g++;chomp $F[1];$c++ if($F[0] eq $F[1]);END{$e=$c/$g;print "$c / ( $g + "}') $(join PoJ.genus.rdp PoJ.genus.utax -v1 | wc -l) " + " $(join PoJ.genus.rdp PoJ.genus.utax -v2 | wc -l) ")" | bc -l)
 #+END_SRC
 
-: 90.286078
+: 90.3%
 
 The two files:
  - PoJ.genus.rdp.gz
@@ -569,7 +569,7 @@ flowering_genera = tax_table(otu_pruned_glom_noundef)[,6] %in% paste("g__",flowe
 100 * sum(otu_table(otu_pruned_glom_noundef)[flowering_genera,]) / sum(otu_table(otu_pruned_glom_noundef))
 #+END_SRC
 
-: 73.71%
+: 73.7%
 
 As a side product the file:
  - utax_genera_pruned_glom
