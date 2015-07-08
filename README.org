@@ -84,11 +84,11 @@ perl ../code/tax2rdp_utax.pl viridiplantae_all_2014.tax\
  ../data/viridiplantae_all_2014.fasta viridiplantae_all_2014
 #+END_SRC
 This generates the following files:
- - viridiplantae_all_2014.gi_tax.map
- - viridiplantae_all_2014.rdp.fa
- - viridiplantae_all_2014.rdp.tax
- - viridiplantae_all_2014.utax.fa
- - viridiplantae_all_2014.utax.tax
+ - [[file:precomputed/viridiplantae_all_2014.gi_tax.map][viridiplantae_all_2014.gi_tax.map]]
+ - [[file:precomputed/viridiplantae_all_2014.rdp.fa][viridiplantae_all_2014.rdp.fa]]
+ - [[file:precomputed/viridiplantae_all_2014.rdp.tax][viridiplantae_all_2014.rdp.tax]]
+ - [[file:training/utax/viridiplantae_all_2014.utax.fa][viridiplantae_all_2014.utax.fa]]
+ - [[file:training/utax/viridiplantae_all_2014.utax.tax][viridiplantae_all_2014.utax.tax]]
 The first three are also included in the precomputed folder. And the last two are included in the training/utax folder.
 The utax files are ready to be used for classification. 
 However to speed up the initial step a udb file can be created as follows:
@@ -118,8 +118,8 @@ java -Xmx32g -jar classifier.jar train --out_dir rdp_trained\
 cp data/its2.properties rdp_trained/its2.properties
 #+END_SRC
 This generates the following files:
- - viridiplantae_all_2014.rdp.rm-dupseq.fa
- - viridiplantae_all_2014.rdp.rm-dupseq.rm-partialseq.fa
+ - [[file:precomputed/viridiplantae_all_2014.rdp.rm-dupseq.fa][viridiplantae_all_2014.rdp.rm-dupseq.fa]]
+ - [[file:precomputed/viridiplantae_all_2014.rdp.rm-dupseq.rm-partialseq.fa][viridiplantae_all_2014.rdp.rm-dupseq.rm-partialseq.fa]]
 All of those are also included in the precomputed folder.
 And the folder rdp_trained including five files:
  - rdp_trained/bergeyTrainingTree.xml
@@ -127,7 +127,7 @@ And the folder rdp_trained including five files:
  - rdp_trained/its2.properties
  - rdp_trained/wordConditionalProbIndexArr.txt
  - rdp_trained/logWordPrior.txt
-Those are the files required for RDP classification and are included as a tar.gz file in training/rdp
+Those are the files required for RDP classification and are included as [[file:training/rdp/rdp_trained.tar.gz][rdp_trained.tar.gz]] in training/rdp
 
 Now you have everything you need to classify sequences with either RDP classifier or UTAX.
 *** Comparison of new database to old
@@ -186,14 +186,14 @@ cd ../flora_usa
 #+END_SRC
 
 This generates the following files in analysis/flora_bavaria
- - bayern.genus.taxids
- - bayern.genus.taxids.tsv
- - bayern.genus.txt
- - bayern.species.cleaned.taxids
- - bayern.species.cleaned.taxids.tsv
- - bayern.species.cleaned.txt
- - bayern.species.taxids.tsv
- - bayern.species.txt
+ - [[file:precomputed/flora_bavaria/bayern.genus.taxids][bayern.genus.taxids]]
+ - [[file:precomputed/flora_bavaria/bayern.genus.taxids.tsv][bayern.genus.taxids.tsv]]
+ - [[file:precomputed/flora_bavaria/bayern.genus.txt][bayern.genus.txt]]
+ - [[file:precomputed/flora_bavaria/bayern.species.cleaned.taxids][bayern.species.cleaned.taxids]]
+ - [[file:precomputed/flora_bavaria/bayern.species.cleaned.taxids.tsv][bayern.species.cleaned.taxids.tsv]]
+ - [[file:precomputed/flora_bavaria/bayern.species.cleaned.txt][bayern.species.cleaned.txt]]
+ - [[file:precomputed/flora_bavaria/bayern.species.taxids.tsv][bayern.species.taxids.tsv]]
+ - [[file:precomputed/flora_bavaria/bayern.species.txt][bayern.species.txt]]
 
 And for each state of the USA the following files in analysis/flora_usa
  - <fips>.checklist
@@ -274,9 +274,9 @@ join -t$'\t' -a1 2014_genera_per_order 2011_genera_per_order | perl -pe 's/^([^\
 join -t$'\t' -v2 2014_genera_per_order 2011_genera_per_order | perl -pe 's/\n/\t0\n/;s/o__//;s/_/\t/' >>increase_genera_per_order.tsv
 #+END_SRC
 The created files:
- - 2011_genera_per_order
- - 2014_genera_per_order
- - increase_genera_per_order.tsv
+ - [[file:precomputed/2011_genera_per_order][2011_genera_per_order]]
+ - [[file:precomputed/2014_genera_per_order][2014_genera_per_order]]
+ - [[file:precomputed/increase_genera_per_order.tsv][increase_genera_per_order.tsv]]
 are included in the precomputed folder.
 
 Creation of the latex table
@@ -311,6 +311,9 @@ EOF
 pdflatex additional_file2.tex
 pdflatex additional_file2.tex
 #+END_SRC
+
+The created tex file is included in the precomputed folder
+ - [[file:precomputed/additional_file2.tex][additional_file2.tex]]
 **** Sequences for selected groups
 The increase of sequences for a number of selected groups can simply be determined by:
 #+BEGIN_SRC sh
@@ -349,6 +352,9 @@ EOF
 pdflatex additional_file3.tex
 pdflatex additional_file3.tex
 #+END_SRC
+
+The created tex file is included in the precomputed folder
+ - [[file:precomputed/additional_file3.tex][additional_file3.tex]]
 ** Analysis of Pollen Samples
 *** Data
 Create a folder called raw and download data from [[http://www.ebi.ac.uk/][EBI]] SRA repository project accession number PRJEB8640.
@@ -415,9 +421,9 @@ perl -pe 's/^([^\t]+)_(\d+)\t/TID_$2\t/' utax_aggregated_counts.tsv >utax_otu_ta
 perl -ne 'if(/^([^\t]+)_(\d+)\t/){print "TID_$2\t"; $tax=$1; $tax=~s/_\d+,/\t/g; $tax=~s/__sub__/__/g; $tax=~s/__super__/__/g; print "$tax\n"; }' utax_aggregated_counts.tsv >utax_tax_table
 #+END_SRC
 The files
- - utax_aggregated_counts.tsv
- - utax_otu_table
- - utax_tax_table
+ - [[file:precomputed/utax_aggregated_counts.tsv][utax_aggregated_counts.tsv]]
+ - [[file:precomputed/utax_otu_table][utax_otu_table]]
+ - [[file:precomputed/utax_tax_table][utax_tax_table]]
 are included in the precomputed folder
 **** RDP classifier
 In the raw folder create a subfolder rdp and execute the following commands:
@@ -448,9 +454,9 @@ perl -pe 's/^([^\t]+)_(\d+)\t/TID_$2\t/' rdp_aggregated_counts.tsv >rdp_otu_tabl
 perl -ne 'if(/^([^\t]+)_(\d+)\t/){print "TID_$2\t"; $tax=$1; $tax=~s/_\d+,/\t/g; $tax=~s/__sub__/__/g; $tax=~s/__super__/__/g; print "$tax\n"; }' rdp_aggregated_counts.tsv >rdp_tax_table
 #+END_SRC
 The files
- - rdp_aggregated_counts.tsv
- - rdp_otu_table
- - rdp_tax_table
+ - [[file:precomputed/rdp_aggregated_counts.tsv][rdp_aggregated_counts.tsv]]
+ - [[file:precomputed/rdp_otu_table][rdp_otu_table]]
+ - [[file:precomputed/rdp_tax_table][rdp_tax_table]]
 are included in the precomputed folder
 *** Read counts
 The reads are directly counted on the fastq files with the following commands in the analysis folder:
@@ -464,7 +470,7 @@ cat read_count_raw.tsv | datamash sum 2 mean 2 sstdev 2 median 2
 | 11624087 | 30271 | 11373 |  30900 |
 
 The created file:
- - read_count_raw.tsv
+ - [[file:precomputed/read_count_raw.tsv][read_count_raw.tsv]]
 is also included in the precomputed folder.
 
 To get the counts for filtered reads (rare taxa removed) use this R code (in the analysis folder):
@@ -527,9 +533,6 @@ title(xlab = "Sequencing Depth [reads]", line = 2)
 text(x=100, y = 87, "b", cex = 2)
 dev.off()
 #+END_SRC
-The created figure:
- - [[file:precomputed/Figure2.pdf][Figure2.pdf]]
-is also included in the precomputed folder.
 *** Comparison of utax and RDP
 This code executed in the analysis folder compares the assignment of RDP and UTAX on the genus level (ignoring confidence values):
 #+BEGIN_SRC sh :dir analysis
@@ -542,8 +545,8 @@ printf %.1f%% $(echo "100 * " $(join PoJ.genus.rdp PoJ.genus.utax | cut -f2,4 -d
 : 90.3%
 
 The two files:
- - PoJ.genus.rdp.gz
- - PoJ.genus.utax.gz
+ - [[file:precomputed/PoJ.genus.rdp.gz][PoJ.genus.rdp.gz]]
+ - [[file:precomputed/PoJ.genus.utax.gz][PoJ.genus.utax.gz]]
 are also included in the precomputed folder (as gzipped archives).
 *** Comparison to flowering data
 The file [[file:data/genera_flowering][data/genera_flowering]] contains a list of genera found near the sampling plots.
@@ -572,7 +575,7 @@ flowering_genera = tax_table(otu_pruned_glom_noundef)[,6] %in% paste("g__",flowe
 : 73.7%
 
 As a side product the file:
- - utax_genera_pruned_glom
+ - [[file:precomputed/utax_genera_pruned_glom][utax_genera_pruned_glom]]
 was created (included in the precomputed folder).
 
 To determine the fraction of documented flowering genera also found in at least one of the samples
