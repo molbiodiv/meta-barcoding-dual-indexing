@@ -162,15 +162,15 @@ The number of species can be calculating by counting the lines in *.specis.taxid
 #+BEGIN_SRC sh
 old=$(cat precomputed/viridiplantae_folds_2011.species.taxids | wc -l)
 new=$(cat precomputed/viridiplantae_all_2014.species.taxids | wc -l)
-increase=$(echo "100*$new/$old - 100" | bc -l)
+increase=$(echo "scale=0;100*$new/$old - 100" | bc)
 echo "Species_2011: $old"
 echo "Species_2014: $new"
 echo "Increase: $increase%"
 #+END_SRC
 
-| Species_2011: |      37403 |
-| Species_2014: |      72325 |
-| Increase:     | 93.366842% |
+| Species_2011: | 37403 |
+| Species_2014: | 72325 |
+| Increase:     |   93% |
 
 *** Bavaria/USA coverage
 **** Retrieval of checklists
