@@ -136,7 +136,7 @@ The number of sequences 2011 and 2014 can be calculated by using grep on header 
 #+BEGIN_SRC sh
 old=$(grep -c "^>" data/viridiplantae_folds_2011.fasta)
 new=$(grep -c "^>" data/viridiplantae_all_2014.fasta)
-increase=$(echo "scale=0;100*$new/$old - 100" | bc )
+increase=$(printf %.0f $(echo "100*$new/$old - 100" | bc -l))
 echo "Sequences_2011: $old"
 echo "Sequences_2014: $new"
 echo "Increase: $increase%"
@@ -152,7 +152,7 @@ at the time of training (of the first reference database). Those sequences have 
 
 Just to be sure:
 #+BEGIN_SRC sh
-echo "scale=0;100*182505/73853 - 100" | bc 
+printf %.0f $(echo "100*182505/73853 - 100" | bc -l)
 #+END_SRC
 
 : 147
@@ -162,7 +162,7 @@ The number of species can be calculating by counting the lines in *.specis.taxid
 #+BEGIN_SRC sh
 old=$(cat precomputed/viridiplantae_folds_2011.species.taxids | wc -l)
 new=$(cat precomputed/viridiplantae_all_2014.species.taxids | wc -l)
-increase=$(echo "scale=0;100*$new/$old - 100" | bc)
+increase=$(printf %d $(echo "100*$new/$old - 100" | bc -l))
 echo "Species_2011: $old"
 echo "Species_2014: $new"
 echo "Increase: $increase%"
@@ -212,19 +212,20 @@ therefore those files are included in the precomputed folder.
 SPECIES_BAVARIA=$(cat flora_bavaria/bayern.species.cleaned.taxids | wc -l)
 COMMON_OLD=$(cat viridiplantae_folds_2011.species.taxids flora_bavaria/bayern.species.cleaned.taxids | sort | uniq -d | wc -l)
 COMMON_NEW=$(cat viridiplantae_all_2014.species.taxids flora_bavaria/bayern.species.cleaned.taxids | sort | uniq -d | wc -l)
-echo Bavaria Species 2014 $(echo "100 * $COMMON_NEW/$SPECIES_BAVARIA" | bc -l)%
-echo Bavaria Species 2011 $(echo "100 * $COMMON_OLD/$SPECIES_BAVARIA" | bc -l)%
+echo Bavaria Species 2014 $(printf %.1f $(echo "100 * $COMMON_NEW/$SPECIES_BAVARIA" | bc -l))%
+echo Bavaria Species 2011 $(printf %.1f $(echo "100 * $COMMON_OLD/$SPECIES_BAVARIA" | bc -l))%
 GENERA_BAVARIA=$(cat flora_bavaria/bayern.genus.taxids | wc -l)
 COMMON_OLD=$(cat viridiplantae_folds_2011.genus.taxids flora_bavaria/bayern.genus.taxids | sort | uniq -d | wc -l)
 COMMON_NEW=$(cat viridiplantae_all_2014.genus.taxids flora_bavaria/bayern.genus.taxids | sort | uniq -d | wc -l)
-echo Bavaria Genus 2014 $(echo "100 * $COMMON_NEW/$GENERA_BAVARIA" | bc -l)%
-echo Bavaria Genus 2011 $(echo "100 * $COMMON_OLD/$GENERA_BAVARIA" | bc -l)%
+echo Bavaria Genus 2014 $(printf %.1f $(echo "100 * $COMMON_NEW/$GENERA_BAVARIA" | bc -l))%
+echo Bavaria Genus 2011 $(printf %.1f $(echo "100 * $COMMON_OLD/$GENERA_BAVARIA" | bc -l))%
 #+END_SRC
 
-| Bavaria | Species | 2014 | 80.098684% |
-| Bavaria | Species | 2011 | 53.125000% |
-| Bavaria | Genus   | 2014 | 90.406976% |
-| Bavaria | Genus   | 2011 | 75.000000% |
+| Bavaria | Species | 2014 | 80.1% |
+| Bavaria | Species | 2011 | 53.1% |
+| Bavaria | Genus   | 2014 | 90.4% |
+| Bavaria | Genus   | 2011 | 75.0% |
+
 ***** USA
 To get a list of species and genus coverage for each state execute the following in the analysis folder:
 #+BEGIN_SRC sh :dir analysis
@@ -568,7 +569,7 @@ flowering_genera = tax_table(otu_pruned_glom_noundef)[,6] %in% paste("g__",flowe
 100 * sum(otu_table(otu_pruned_glom_noundef)[flowering_genera,]) / sum(otu_table(otu_pruned_glom_noundef))
 #+END_SRC
 
-: 73.71091 %
+: 73.71%
 
 As a side product the file:
  - utax_genera_pruned_glom
@@ -579,7 +580,7 @@ the following code can be executed (analysis folder):
 #+BEGIN_SRC sh :dir analysis
 TOTAL=$(cat ../data/genera_flowering | wc -l)
 COMMON=$(cat ../data/genera_flowering <(perl -pe 's/^g__//' utax_genera_pruned_glom | grep -v undef_ | sort -u) | sort | uniq -d | wc -l)
-echo $COMMON" / "$TOTAL" = "$(echo "scale=0;100 * "$COMMON" / "$TOTAL | bc )"%"
+echo $COMMON" / "$TOTAL" = "$(printf %.1f $(echo "100 * "$COMMON" / "$TOTAL | bc -l))"%"
 #+END_SRC
 
-: 98 / 201 = 48.7%
+: 98 / 201 = 48.8%
