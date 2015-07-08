@@ -36,9 +36,9 @@ Only the RDP training was performed on a machine with more RAM available.
 *** Data
 The ITS2 sequences can be retrieved from the ITS2 database.
 The previous reference db consisted of all "Direct folds & Homology modeled" sequences from "Viridiplantae" (db version v4.0.0, 2011).
-This [[data/viridiplantae_folds_2011.fasta][file]] is included for comparison.
+This file [[file:data/viridiplantae_folds_2011.fasta][viridiplantae_folds_2011.fasta]] is included for comparison.
 The new reference database consists of all sequences from "Viridiplantae" of an inofficial ITS2 database release (2014).
-This [[data/viridiplantae_all_2014.fasta][file]] is also included in this repository.
+This file [[file:data/viridiplantae_all_2014.fasta][viridiplantae_all_2014.fasta]] is also included in this repository.
 *** Taxonomic assignment
 Assign NCBI taxonomy on kingdom, phylum, class, order, family, genus and species level by mapping gi to taxid.
 
