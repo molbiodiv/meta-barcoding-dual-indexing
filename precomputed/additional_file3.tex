@@ -3,11 +3,13 @@
 \usepackage{longtable}
 \newcolumntype{R}{>{\raggedleft\arraybackslash}X}
 \usepackage{booktabs}
+\setcounter{table}{1}
+\renewcommand{\thetable}{S\arabic{table}}%
 
 \begin{document}
 
 \begin{longtabu}{XRR}
-\caption*{Comparison of the number of sequences per group for selected taxonomic groups.}\\
+\caption{Comparison of the number of sequences per group for selected taxonomic groups.}\\
 \toprule
 Group & old & new \\
 \midrule

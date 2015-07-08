@@ -3,11 +3,12 @@
 \usepackage{longtable}
 \newcolumntype{R}{>{\raggedleft\arraybackslash}X}
 \usepackage{booktabs}
+\renewcommand{\thetable}{S\arabic{table}}%
 
 \begin{document}
 
 \begin{longtabu}{lXRR}
-\caption*{Comparison of the number of genera per order for all orders.}\\
+\caption{Comparison of the number of genera per order for all orders.}\\
 \toprule
 Order & TaxID & Genera old & Genera new \\
 \midrule
