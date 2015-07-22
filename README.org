@@ -2,14 +2,10 @@
 #+AUTHOR: Markus Ankenbrand
 
 * About
-This is a collection of the computational methods used for the publication <Link will be included when available>.
+This is a collection of the computational methods used for the publication [[http://doi.org/10.1186/s12898-015-0051-y][Increased efficiency in identifying mixed pollen samples by meta-barcoding with a dual-indexing approach]].
 Here we provide all custom scripts and commands to replicate our results.
-Furthermore you can download the pre-computed training sets for the RDPclassifier <Link> and UTAX <Link>.
-If you find this information useful please consider citing our article <Link>.
-
-* Data
-If you are just interested in the pre-computed training sets go to releases and download the tar-ball.
-There you can find the training sets in the subfolder training.
+Furthermore you can download the pre-computed training sets for the RDPclassifier [[https://github.com/iimog/meta-barcoding-dual-indexing/raw/master/training/rdp/rdp_trained.tar.gz][here]] and UTAX [[https://github.com/iimog/meta-barcoding-dual-indexing/raw/master/training/utax/utax_trained.tar.gz][here]].
+If you find this information useful please consider citing our [[http://doi.org/10.1186/s12898-015-0051-y][article]].
 
 * Dependencies
 This is a list of software tools and versions used in the original analysis.
