@@ -155,6 +155,14 @@ my $cmd_sp = "perl -pe 's/^([^\\t]+)_(\\d+)\\t/TID_\$2\\t/' $opt_out/utax_aggreg
 $cmd_sp .= "perl -ne 'if(/^([^\\t]+)_(\\d+)\\t/){print \"TID_\$2\\t\"; \$tax=\$1; \$tax=~s/_\\d+,/\\t/g; \$tax=~s/__sub__/__/g; \$tax=~s/__super__/__/g; print \"\$tax\\n\"; }' $opt_out/utax_aggregated_counts.tsv >$opt_out/utax_tax_table";
 print_and_execute($cmd_sp);
 
+=head2 print_and_execute
+
+This functions takes a string as argument which is executed using the system shell.
+The command and its return value are printed on STDOUT.
+If an error occurs the script dies.
+
+=cut
+
 sub print_and_execute{
     my $cmd = $_[0];
     print $cmd;
