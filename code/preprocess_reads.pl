@@ -141,6 +141,14 @@ while(@ARGV>0){
     my $ret_us = qx($cmd_us);
     die $ret_us if $? >> 8;
     print $ret_us;
+
+    # Classify with utax
+    my $cmd_ut = "$opt_usearch_bin -utax $opt_out/filtered/$base.fq -db $opt_utax_db -utax_rawscore -tt $opt_utax_tt -utaxout $opt_out/utax/$base.utax\n";
+    print $cmd_ut;
+    my $ret_ut = qx($cmd_ut);
+    die $ret_ut if $? >> 8;
+    print $ret_ut;
+
 }
 
 =head1 LIMITATIONS
