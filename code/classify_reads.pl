@@ -14,21 +14,22 @@ my %options = ();
 
 =head1 NAME 
 
-preprocess_reads.pl
+classify_reads.pl
 
 =head1 DESCRIPTION
 
-This script wraps the preprocessing of multiple fastq files.
-Input are multiple unjoined ITS2 read fastq files and output is a folder with joined and filtered fastq files.
-The steps are join (with fastq-join) and filter (with usearch).
-Requirements (tested versions): fastq-join (Version 1.01.759), usearch (Version v8.0.1477)
-The readfiles have to be alternating first read and second read of the same sample.
+This script wraps the preprocessing and classification of multiple fastq files.
+Input are multiple unjoined ITS2 read fastq files and output is a folder with a tax_table and otu_table for import into phyloseq.
+The intermediate files are also preserved.
+The steps are join (with fastq-join), filter (with usearch), classify (with usearch or RDPclassifier), count, aggregate and convert.
+Requirements (tested versions): fastq-join (Version 1.01.759), usearch (Version v8.0.1477)[, RDPclassifier (Version 2.10.2)]
+The readfiles have to be ordered (alternating first read file and second read file of the same sample).
 With most naming schemes this should be automatically the case when using wildcards but be aware of this requirement if you face problems.
 The file name of the first read file will be used for the joined and filtered files.
 
 =head1 USAGE
 
-  $ perl preprocess_reads.pl --out=<dir> [options] <sample1_1>.fq <sample1_2>.fq [<sample2_1>.fq <sample2_2>.fq ...]
+  $ perl classify_reads.pl --out=<dir> [options] <sample1_1>.fq <sample1_2>.fq [<sample2_1>.fq <sample2_2>.fq ...]
 
 =cut
 
@@ -60,7 +61,7 @@ Path to the utax taxtree file
 
 $options{'utax-taxtree=s'} = \( my $opt_utax_tt );
 
-=item --utax-rawscore-cutoff=<int>
+=item [--utax-rawscore-cutoff=<int>]
 
 This value is passed to the counting script and takes the cuts the classification at the first level with rawscore below the cutoff
 Default = 20
@@ -69,7 +70,7 @@ Default = 20
 
 $options{'utax-rawscore-cutoff=i'} = \( my $opt_utax_rs_cutoff = 20 );
 
-=item --fastq_truncqual=<int>
+=item [--fastq_truncqual=<int>]
 
 This value is passed to usearch as -fastq_truncqual (a value of 19 means Q20 filtering)
 Default = 19
