@@ -44,6 +44,22 @@ Output directory will contain a joined and filtered subfolder with the respectiv
 
 $options{'out=s'} = \( my $opt_out );
 
+=item --utax-db=<file>
+
+Path to the utax database file in fasta or udb format
+
+=cut
+
+$options{'utax-db=s'} = \( my $opt_utax_db );
+
+=item --utax-taxtree=<file>
+
+Path to the utax taxtree file
+
+=cut
+
+$options{'utax-taxtree=s'} = \( my $opt_utax_tt );
+
 =item --fastq_truncqual=<int>
 
 This value is passed to usearch as -fastq_truncqual (a value of 19 means Q20 filtering)
@@ -67,6 +83,8 @@ GetOptions(%options) or pod2usage(1);
 			     
 pod2usage(1) if($opt_help);  
 pod2usage( -msg => 'missing output directory --out <dir> to set', -verbose => 0 ) unless ($opt_out);
+pod2usage( -msg => 'utax-db is required to classify with utax --utax-db <path> to set', -verbose => 0 ) unless ($opt_utax_db);
+pod2usage( -msg => 'utax-taxtree is required to classify with utax --utax-taxtree <path> to set', -verbose => 0 ) unless ($opt_utax_tt);
 pod2usage( -msg => 'missing input files', -verbose => 0 ) unless (@ARGV > 1);
 			     
 =head1 CODE		     
