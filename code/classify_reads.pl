@@ -154,7 +154,8 @@ print_and_execute($cmd_ag);
 
 # Split aggregated counts into tax_table and otu_table:
 my $cmd_sp = "perl -pe 's/^([^\\t]+)_(\\d+)\\t/TID_\$2\\t/' $opt_out/utax_aggregated_counts.tsv >$opt_out/utax_otu_table\n";
-$cmd_sp .= "perl -ne 'if(/^([^\\t]+)_(\\d+)\\t/){print \"TID_\$2\\t\"; \$tax=\$1; \$tax=~s/_\\d+,/\\t/g; \$tax=~s/__sub__/__/g; \$tax=~s/__super__/__/g; print \"\$tax\\n\"; }' $opt_out/utax_aggregated_counts.tsv >$opt_out/utax_tax_table";
+$cmd_sp .= "perl -ne 'if(/^([^\\t]+)_(\\d+)\\t/){print \"TID_\$2\\t\"; \$tax=\$1; \$tax=~s/_\\d+,/\\t/g; \$tax=~s/__sub__/__/g; \$tax=~s/__super__/__/g; print \"\$tax\\n\"; }' $opt_out/utax_aggregated_counts.tsv >$opt_out/utax_tax_table\n";
+$cmd_sp .= "head -n1 $opt_out/utax_aggregated_counts.tsv | perl -pe 's/\t/#Sample\t/;s/\t/\t\n/g' >$opt_out/mapfile.tsv\n";
 print_and_execute($cmd_sp);
 
 close LOG or die "$!";
