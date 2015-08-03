@@ -80,10 +80,14 @@ while(@ARGV>0){
     my $r2 = shift(@ARGV);
     my @suffix = (".fq", ".fastq");
     my $base = basename($r1,@suffix);
-    my $cmd = "fastq-join $r1 $r2 -o $opt_out/joined/$base.%.fq\n";
-    print $cmd;
-    my $ret = qx($cmd);
-    print $ret;
+    my $cmd_fj = "fastq-join $r1 $r2 -o $opt_out/joined/$base.%.fq\n";
+    print $cmd_fj;
+    my $ret_fj = qx($cmd_fj);
+    print $ret_fj;
+    my $cmd_us = "usearch8 -fastq_filter $opt_out/joined/$base.join.fq -fastq_truncqual $opt_fastq_truncqual -fastq_minlen 150 -fastqout $opt_out/filtered/$base.fq";
+    print $cmd_us;
+    my $ret_us = qx($cmd_us);
+    print $ret_us;
 }
 
 =head1 LIMITATIONS
