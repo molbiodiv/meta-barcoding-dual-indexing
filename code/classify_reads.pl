@@ -122,6 +122,7 @@ chomp($opt_usearch_bin);
 =cut			     
 			     
 make_path($opt_out.'/joined', $opt_out.'/filtered', $opt_out.'/utax', $opt_out.'/count');
+open (LOG, ">$opt_out/log") or die "$!";;
 
 while(@ARGV>0){
     my $r1 = shift(@ARGV);
@@ -156,10 +157,12 @@ my $cmd_sp = "perl -pe 's/^([^\\t]+)_(\\d+)\\t/TID_\$2\\t/' $opt_out/utax_aggreg
 $cmd_sp .= "perl -ne 'if(/^([^\\t]+)_(\\d+)\\t/){print \"TID_\$2\\t\"; \$tax=\$1; \$tax=~s/_\\d+,/\\t/g; \$tax=~s/__sub__/__/g; \$tax=~s/__super__/__/g; print \"\$tax\\n\"; }' $opt_out/utax_aggregated_counts.tsv >$opt_out/utax_tax_table";
 print_and_execute($cmd_sp);
 
+close LOG or die "$!";
+
 =head2 print_and_execute
 
 This functions takes a string as argument which is executed using the system shell.
-The command and its return value are printed on STDOUT.
+The command and its return value are printed on STDOUT and to the log file.
 If an error occurs the script dies.
 
 =cut
@@ -167,7 +170,9 @@ If an error occurs the script dies.
 sub print_and_execute{
     my $cmd = $_[0];
     print $cmd;
+    print LOG $cmd;
     my $ret = qx($cmd);
+    print LOG $ret;
     die $ret if $? >> 8;
     print $ret;
     return $ret;
