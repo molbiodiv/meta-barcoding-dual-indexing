@@ -69,6 +69,22 @@ Default = 19
 
 $options{'fastq_truncqual=i'} = \( my $opt_fastq_truncqual = 19 );
 
+=item [--fastq-join-bin=<FILE>] 
+
+Path to fastq-join binary file. Default tries if fastq-join is in PATH;
+
+=cut
+
+$options{'fastq-join-bin=s'} = \( my $opt_fastq_join_bin = `which fastq-join 2>/dev/null` );
+
+=item [--usearch-bin=<FILE>] 
+
+Path to usearch binary file. Default tries if usearch is in PATH;
+If you have multiple copies of usearch please make sure that usearch version 8 is used.
+
+=cut
+
+$options{'usearch-bin=s'} = \( my $opt_usearch_bin = `which usearch 2>/dev/null` );
 
 =item [--help] 		     
 			     
@@ -83,10 +99,14 @@ GetOptions(%options) or pod2usage(1);
 			     
 pod2usage(1) if($opt_help);  
 pod2usage( -msg => 'missing output directory --out <dir> to set', -verbose => 0 ) unless ($opt_out);
+pod2usage( -msg => 'fastq-join not in path and bin not specified --fastq-join-bin <path> to set', -verbose => 0 ) unless ($opt_fastq_join_bin);
+pod2usage( -msg => 'usearch not in path and bin not specified --usearch-bin <path> to set', -verbose => 0 ) unless ($opt_usearch_bin);
 pod2usage( -msg => 'utax-db is required to classify with utax --utax-db <path> to set', -verbose => 0 ) unless ($opt_utax_db);
 pod2usage( -msg => 'utax-taxtree is required to classify with utax --utax-taxtree <path> to set', -verbose => 0 ) unless ($opt_utax_tt);
 pod2usage( -msg => 'missing input files', -verbose => 0 ) unless (@ARGV > 1);
-			     
+chomp($opt_fastq_join_bin);
+chomp($opt_usearch_bin);
+
 =head1 CODE		     
 			     
 =cut			     
@@ -98,12 +118,12 @@ while(@ARGV>0){
     my $r2 = shift(@ARGV);
     my @suffix = (".fq", ".fastq");
     my $base = basename($r1,@suffix);
-    my $cmd_fj = "fastq-join $r1 $r2 -o $opt_out/joined/$base.%.fq\n";
+    my $cmd_fj = "$opt_fastq_join_bin $r1 $r2 -o $opt_out/joined/$base.%.fq\n";
     print $cmd_fj;
     my $ret_fj = qx($cmd_fj);
     die $ret_fj if $? >> 8;
     print $ret_fj;
-    my $cmd_us = "usearch8 -fastq_filter $opt_out/joined/$base.join.fq -fastq_truncqual $opt_fastq_truncqual -fastq_minlen 150 -fastqout $opt_out/filtered/$base.fq";
+    my $cmd_us = "$opt_usearch_bin -fastq_filter $opt_out/joined/$base.join.fq -fastq_truncqual $opt_fastq_truncqual -fastq_minlen 150 -fastqout $opt_out/filtered/$base.fq";
     print $cmd_us;
     my $ret_us = qx($cmd_us);
     die $ret_us if $? >> 8;
