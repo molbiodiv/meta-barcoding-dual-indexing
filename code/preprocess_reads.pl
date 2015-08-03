@@ -157,6 +157,14 @@ while(@ARGV>0){
     print $ret_co;
 }
 
+# Aggregate counts with custom script
+my $cmd_ag = "perl $FindBin::RealBin/aggregate_counts.pl $opt_out/count/*.utax.count >$opt_out/utax_aggregated_counts.tsv\n";
+$cmd_ag .= "perl -i -pe 's/$opt_out\\/count\\///g;s/\\.utax\\.count//g' $opt_out/utax_aggregated_counts.tsv\n";
+print $cmd_ag;
+my $ret_ag = qx($cmd_ag);
+die $ret_ag if $? >> 8;
+print $ret_ag;
+
 =head1 LIMITATIONS
 
 If you encounter a bug, feel free to contact Markus Ankenbrand
