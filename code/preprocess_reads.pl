@@ -120,7 +120,7 @@ chomp($opt_usearch_bin);
 			     
 =cut			     
 			     
-make_path($opt_out.'/joined', $opt_out.'/filtered');
+make_path($opt_out.'/joined', $opt_out.'/filtered', $opt_out.'/utax', $opt_out.'/count');
 
 while(@ARGV>0){
     my $r1 = shift(@ARGV);
