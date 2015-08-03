@@ -149,6 +149,12 @@ while(@ARGV>0){
     die $ret_ut if $? >> 8;
     print $ret_ut;
 
+    # Count with custom script
+    my $cmd_co = "perl $FindBin::RealBin/count_taxa_utax.pl --in $opt_out/utax/$base.utax --cutoff $opt_utax_rs_cutoff >$opt_out/count/$base.utax.count\n";
+    print $cmd_co;
+    my $ret_co = qx($cmd_co);
+    die $ret_co if $? >> 8;
+    print $ret_co;
 }
 
 =head1 LIMITATIONS
