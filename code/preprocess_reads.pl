@@ -130,40 +130,34 @@ while(@ARGV>0){
 
     # Join with fastq-join
     my $cmd_fj = "$opt_fastq_join_bin $r1 $r2 -o $opt_out/joined/$base.%.fq\n";
-    print $cmd_fj;
-    my $ret_fj = qx($cmd_fj);
-    die $ret_fj if $? >> 8;
-    print $ret_fj;
+    print_and_execute($cmd_fj);
 
     # Filter with usearch
     my $cmd_us = "$opt_usearch_bin -fastq_filter $opt_out/joined/$base.join.fq -fastq_truncqual $opt_fastq_truncqual -fastq_minlen 150 -fastqout $opt_out/filtered/$base.fq";
-    print $cmd_us;
-    my $ret_us = qx($cmd_us);
-    die $ret_us if $? >> 8;
-    print $ret_us;
+    print_and_execute($cmd_us);
 
     # Classify with utax
     my $cmd_ut = "$opt_usearch_bin -utax $opt_out/filtered/$base.fq -db $opt_utax_db -utax_rawscore -tt $opt_utax_tt -utaxout $opt_out/utax/$base.utax\n";
-    print $cmd_ut;
-    my $ret_ut = qx($cmd_ut);
-    die $ret_ut if $? >> 8;
-    print $ret_ut;
+    print_and_execute($cmd_ut);
 
     # Count with custom script
     my $cmd_co = "perl $FindBin::RealBin/count_taxa_utax.pl --in $opt_out/utax/$base.utax --cutoff $opt_utax_rs_cutoff >$opt_out/count/$base.utax.count\n";
-    print $cmd_co;
-    my $ret_co = qx($cmd_co);
-    die $ret_co if $? >> 8;
-    print $ret_co;
+    print_and_execute($cmd_co);
 }
 
 # Aggregate counts with custom script
 my $cmd_ag = "perl $FindBin::RealBin/aggregate_counts.pl $opt_out/count/*.utax.count >$opt_out/utax_aggregated_counts.tsv\n";
 $cmd_ag .= "perl -i -pe 's/$opt_out\\/count\\///g;s/\\.utax\\.count//g' $opt_out/utax_aggregated_counts.tsv\n";
-print $cmd_ag;
-my $ret_ag = qx($cmd_ag);
-die $ret_ag if $? >> 8;
-print $ret_ag;
+print_and_execute($cmd_ag);
+
+sub print_and_execute{
+    my $cmd = $_[0];
+    print $cmd;
+    my $ret = qx($cmd);
+    die $ret if $? >> 8;
+    print $ret;
+    return $ret;
+}
 
 =head1 LIMITATIONS
 
