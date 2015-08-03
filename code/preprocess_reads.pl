@@ -127,11 +127,15 @@ while(@ARGV>0){
     my $r2 = shift(@ARGV);
     my @suffix = (".fq", ".fastq");
     my $base = basename($r1,@suffix);
+
+    # Join with fastq-join
     my $cmd_fj = "$opt_fastq_join_bin $r1 $r2 -o $opt_out/joined/$base.%.fq\n";
     print $cmd_fj;
     my $ret_fj = qx($cmd_fj);
     die $ret_fj if $? >> 8;
     print $ret_fj;
+
+    # Filter with usearch
     my $cmd_us = "$opt_usearch_bin -fastq_filter $opt_out/joined/$base.join.fq -fastq_truncqual $opt_fastq_truncqual -fastq_minlen 150 -fastqout $opt_out/filtered/$base.fq";
     print $cmd_us;
     my $ret_us = qx($cmd_us);
