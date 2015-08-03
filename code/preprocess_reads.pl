@@ -60,6 +60,15 @@ Path to the utax taxtree file
 
 $options{'utax-taxtree=s'} = \( my $opt_utax_tt );
 
+=item --utax-rawscore-cutoff=<int>
+
+This value is passed to the counting script and takes the cuts the classification at the first level with rawscore below the cutoff
+Default = 20
+
+=cut
+
+$options{'utax-rawscore-cutoff=i'} = \( my $opt_utax_rs_cutoff = 20 );
+
 =item --fastq_truncqual=<int>
 
 This value is passed to usearch as -fastq_truncqual (a value of 19 means Q20 filtering)
