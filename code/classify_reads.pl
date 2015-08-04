@@ -147,6 +147,8 @@ pod2usage( -msg => 'fastq-join not in path and bin not specified --fastq-join-bi
 pod2usage( -msg => 'usearch not in path and bin not specified --usearch-bin <path> to set', -verbose => 0 ) unless ($opt_usearch_bin);
 pod2usage( -msg => 'utax-db is required to classify with utax --utax-db <path> to set', -verbose => 0 ) unless ($opt_utax_db || !$opt_utax);
 pod2usage( -msg => 'utax-taxtree is required to classify with utax --utax-taxtree <path> to set', -verbose => 0 ) unless ($opt_utax_tt || !$opt_utax);
+pod2usage( -msg => 'rdp-jar is required to classify with RDPclassifier --rdp-jar <path> to set', -verbose => 0 ) unless ($opt_rdp_jar || !$opt_rdp);
+pod2usage( -msg => 'rdp-train-propfile is required to classify with RDPclassifier --rdp-train-propfile <path> to set', -verbose => 0 ) unless ($opt_rdp_train_propfile || !$opt_rdp);
 pod2usage( -msg => 'missing input files', -verbose => 0 ) unless (@ARGV > 1);
 chomp($opt_fastq_join_bin);
 chomp($opt_usearch_bin);
