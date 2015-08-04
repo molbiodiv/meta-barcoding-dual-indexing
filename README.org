@@ -443,7 +443,7 @@ In the raw folder create a subfolder rdp and execute the following commands:
 #+BEGIN_SRC bash :dir raw/rdp
 for i in $(find ../filtered -name "*.fq")
 do
-    BASE=$(basename i1 .fq)
+    BASE=$(basename $i .fq)
     java -jar classifier.jar classify\
      --train_propfile ../../training/rdp/rdp_trained/its2.properties\
      --outputFile $BASE.rdp $i
