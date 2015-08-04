@@ -45,9 +45,17 @@ Output directory will contain a joined and filtered subfolder with the respectiv
 
 $options{'out=s'} = \( my $opt_out );
 
+=item [--[no]utax]
+
+Should utax be used for classification (default: yes)
+
+=cut
+
+$options{'utax!'} = \( my $opt_utax );
+
 =item --utax-db=<file>
 
-Path to the utax database file in fasta or udb format
+Path to the utax database file in fasta or udb format (required if not --noutax)
 
 =cut
 
@@ -55,7 +63,7 @@ $options{'utax-db=s'} = \( my $opt_utax_db );
 
 =item --utax-taxtree=<file>
 
-Path to the utax taxtree file
+Path to the utax taxtree file (required if not --noutax)
 
 =cut
 
