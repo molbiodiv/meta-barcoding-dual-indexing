@@ -48,6 +48,16 @@ $options{'out=s'} = \( my $opt_out );
 =item [--[no]utax]
 
 Should utax be used for classification (default: yes)
+If --noutax is used to disable utax and --rdp is not set no classification will be used (only preprocessing: joining, filtering)
+
+=cut
+
+$options{'utax!'} = \( my $opt_utax = 1 );
+
+=item [--[no]rdp]
+
+Should RDPclassifier be used for classification (default: no)
+If --rdp is set and utax is not disabled via --noutax both tools are used for classification.
 
 =cut
 
