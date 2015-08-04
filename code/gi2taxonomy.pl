@@ -343,17 +343,6 @@ If you encounter a bug please drop me a line.
 
 =over
 
-=item * Markus Ankenbrand, markus.ankenbrand@stud-mail.uni-wuerzburg.de
+=item * Markus Ankenbrand, markus.ankenbrand@uni-wuerzburg.de
 
 =back
-
-=head1 COPYRIGHT AND LICENSE
-
-Copyright (C) 2013 by Markus Ankenbrand
-
-This script is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself, either Perl version 5.10.0 or, at
-your option, any later version of Perl 5 you may have available.
-
-=back
-
