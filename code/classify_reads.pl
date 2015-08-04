@@ -156,8 +156,12 @@ chomp($opt_usearch_bin);
 =head1 CODE		     
 			     
 =cut			     
-			     
-make_path($opt_out.'/joined', $opt_out.'/filtered', $opt_out.'/utax', $opt_out.'/count');
+
+# Create output dir structure
+make_path($opt_out.'/joined', $opt_out.'/filtered');
+make_path($opt_out.'/utax') if($opt_utax);
+make_path($opt_out.'/rdp') if($opt_rdp);
+make_path($opt_out.'/count') if($opt_utax || $opt_rdp);
 open (LOG, ">$opt_out/log") or die "$!";;
 
 while(@ARGV>0){
