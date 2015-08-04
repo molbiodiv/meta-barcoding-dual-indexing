@@ -26,6 +26,7 @@ Only the RDP training was performed on a machine with more RAM available.
  - [[http://www.r-project.org/][R]] (Version 3.1.2 (2014-10-31) -- "Pumpkin Helmet", Platform: x86_64-pc-linux-gnu (64-bit))
  - [[https://www.perl.org/][perl]] (Version v5.20.2 built for x86_64-linux-gnu-thread-multi)
  - [[http://qiime.org/][QIIME]] (Version 1.8.0+dfsg-4)
+ - [[https://code.google.com/p/ea-utils/wiki/FastqJoin][fastq-join]] (Version 1.01.759)
 
 * Workflow
 ** Preparation of Reference Database
