@@ -28,6 +28,37 @@ Only the RDP training was performed on a machine with more RAM available.
  - [[http://qiime.org/][QIIME]] (Version 1.8.0+dfsg-4)
  - [[https://code.google.com/p/ea-utils/wiki/FastqJoin][fastq-join]] (Version 1.01.759)
 
+* Quick Start
+If you want to start to classify your own data right now, this is the easiest way to do it:
+ - Make sure you have installed perl, usearch, fastq-join (and RDPclassifier if needed).
+ - Put all your fastq read files in an empty directory
+ - Execute the following commands:
+#+BEGIN_SRC sh
+# git clone the repository
+git clone https://github.com/iimog/meta-barcoding-dual-indexing
+# alternatively you can download and extract the release
+
+cd meta-barcoding-dual-indexing
+mkdir myanalyses
+cd myanalyses
+# extract the plant reference databases for classification
+tar xzvf ../training/rdp/rdp_trained.tar.gz
+tar xzvf ../training/utax/utax_trained.tar.gz
+
+# this step is not required but recommended
+# if you choose to skip it use .fa instead of .udb when calling classify_reads.pl
+usearch -makeudb_usearch utax_trained/viridiplantae_all_2014.utax.fa\
+ -output utax_trained/viridiplantae_all_2014.utax.udb
+
+# call the wrapper script that performs:
+# joining, filtering, classification and aggregation for all samples
+perl ../code/classify_reads.pl --out results <path_to_reads>/*.fastq\
+ --utax-db utax_trained/viridiplantae_all_2014.utax.udb\
+ --utax-taxtree utax_trained/viridiplantae_all_2014.utax.tax\
+ --rdp --rdp-jar <path_to_RDPTools>/classifier.jar\
+ --rdp-train-propfile rdp_trained/its2.properties
+
+#+END_SRC
 * Workflow
 ** Preparation of Reference Database
 *** Data
