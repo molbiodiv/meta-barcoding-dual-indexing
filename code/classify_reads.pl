@@ -208,18 +208,8 @@ while(@ARGV>0){
     }
 }
 
-if($opt_utax){
-    # Aggregate counts with custom script
-    my $cmd_ag = "perl $FindBin::RealBin/aggregate_counts.pl $opt_out/count/*.utax.count >$opt_out/utax_aggregated_counts.tsv\n";
-    $cmd_ag .= "perl -i -pe 's/$opt_out\\/count\\///g;s/\\.utax\\.count//g' $opt_out/utax_aggregated_counts.tsv\n";
-    print_and_execute($cmd_ag);
-
-    # Split aggregated counts into tax_table and otu_table:
-    my $cmd_sp = "perl -pe 's/^([^\\t]+)_(\\d+)\\t/TID_\$2\\t/' $opt_out/utax_aggregated_counts.tsv >$opt_out/utax_otu_table\n";
-    $cmd_sp .= "perl -ne 'if(/^([^\\t]+)_(\\d+)\\t/){print \"TID_\$2\\t\"; \$tax=\$1; \$tax=~s/_\\d+,/\\t/g; \$tax=~s/__sub__/__/g; \$tax=~s/__super__/__/g; print \"\$tax\\n\"; }' $opt_out/utax_aggregated_counts.tsv >$opt_out/utax_tax_table\n";
-$cmd_sp .= "head -n1 $opt_out/utax_aggregated_counts.tsv | perl -pe 's/\t/#Sample\t/;s/\t/\t\n/g' >$opt_out/mapfile.tsv\n";
-    print_and_execute($cmd_sp);
-}
+aggregate_and_convert("utax") if($opt_utax);
+aggregate_and_convert("rdp") if($opt_rdp);
 
 close LOG or die "$!";
 
@@ -240,6 +230,27 @@ sub print_and_execute{
     die $ret if $? >> 8;
     print $ret;
     return $ret;
+}
+
+=head2 aggregate_and_convert
+
+This functions takes a string as argument which is either 'rdp' or 'utax'.
+The counts of the respective type will be aggregated and converted into phyloseq compatible files.
+
+=cut
+
+sub aggregate_and_convert{
+    my $type = $_[0];
+    # Aggregate counts with custom script
+    my $cmd_ag = "perl $FindBin::RealBin/aggregate_counts.pl $opt_out/count/*.$type".".count >$opt_out/$type"."_aggregated_counts.tsv\n";
+    $cmd_ag .= "perl -i -pe 's/$opt_out\\/count\\///g;s/\\.$type\\.count//g' $opt_out/$type"."_aggregated_counts.tsv\n";
+    print_and_execute($cmd_ag);
+
+    # Split aggregated counts into tax_table and otu_table:
+    my $cmd_sp = "perl -pe 's/^([^\\t]+)_(\\d+)\\t/TID_\$2\\t/' $opt_out/$type"."_aggregated_counts.tsv >$opt_out/$type"."_otu_table\n";
+    $cmd_sp .= "perl -ne 'if(/^([^\\t]+)_(\\d+)\\t/){print \"TID_\$2\\t\"; \$tax=\$1; \$tax=~s/_\\d+,/\\t/g; \$tax=~s/__sub__/__/g; \$tax=~s/__super__/__/g; print \"\$tax\\n\"; }' $opt_out/$type"."_aggregated_counts.tsv >$opt_out/$type"."_tax_table\n";
+$cmd_sp .= "head -n1 $opt_out/$type"."_aggregated_counts.tsv | perl -pe 's/\t/#Sample\t/;s/\t/\t\n/g' >$opt_out/mapfile.tsv\n";
+    print_and_execute($cmd_sp);
 }
 
 =head1 LIMITATIONS
