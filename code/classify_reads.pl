@@ -146,25 +146,29 @@ while(@ARGV>0){
     my $cmd_us = "$opt_usearch_bin -fastq_filter $opt_out/joined/$base.join.fq -fastq_truncqual $opt_fastq_truncqual -fastq_minlen 150 -fastqout $opt_out/filtered/$base.fq";
     print_and_execute($cmd_us);
 
-    # Classify with utax
-    my $cmd_ut = "$opt_usearch_bin -utax $opt_out/filtered/$base.fq -db $opt_utax_db -utax_rawscore -tt $opt_utax_tt -utaxout $opt_out/utax/$base.utax\n";
-    print_and_execute($cmd_ut);
-
-    # Count with custom script
-    my $cmd_co = "perl $FindBin::RealBin/count_taxa_utax.pl --in $opt_out/utax/$base.utax --cutoff $opt_utax_rs_cutoff >$opt_out/count/$base.utax.count\n";
-    print_and_execute($cmd_co);
+    if($opt_utax){
+	# Classify with utax
+	my $cmd_ut = "$opt_usearch_bin -utax $opt_out/filtered/$base.fq -db $opt_utax_db -utax_rawscore -tt $opt_utax_tt -utaxout $opt_out/utax/$base.utax\n";
+	print_and_execute($cmd_ut);
+	
+	# Count with custom script
+	my $cmd_co = "perl $FindBin::RealBin/count_taxa_utax.pl --in $opt_out/utax/$base.utax --cutoff $opt_utax_rs_cutoff >$opt_out/count/$base.utax.count\n";
+	print_and_execute($cmd_co);
+    }
 }
 
-# Aggregate counts with custom script
-my $cmd_ag = "perl $FindBin::RealBin/aggregate_counts.pl $opt_out/count/*.utax.count >$opt_out/utax_aggregated_counts.tsv\n";
-$cmd_ag .= "perl -i -pe 's/$opt_out\\/count\\///g;s/\\.utax\\.count//g' $opt_out/utax_aggregated_counts.tsv\n";
-print_and_execute($cmd_ag);
+if($opt_utax){
+    # Aggregate counts with custom script
+    my $cmd_ag = "perl $FindBin::RealBin/aggregate_counts.pl $opt_out/count/*.utax.count >$opt_out/utax_aggregated_counts.tsv\n";
+    $cmd_ag .= "perl -i -pe 's/$opt_out\\/count\\///g;s/\\.utax\\.count//g' $opt_out/utax_aggregated_counts.tsv\n";
+    print_and_execute($cmd_ag);
 
-# Split aggregated counts into tax_table and otu_table:
-my $cmd_sp = "perl -pe 's/^([^\\t]+)_(\\d+)\\t/TID_\$2\\t/' $opt_out/utax_aggregated_counts.tsv >$opt_out/utax_otu_table\n";
-$cmd_sp .= "perl -ne 'if(/^([^\\t]+)_(\\d+)\\t/){print \"TID_\$2\\t\"; \$tax=\$1; \$tax=~s/_\\d+,/\\t/g; \$tax=~s/__sub__/__/g; \$tax=~s/__super__/__/g; print \"\$tax\\n\"; }' $opt_out/utax_aggregated_counts.tsv >$opt_out/utax_tax_table\n";
+    # Split aggregated counts into tax_table and otu_table:
+    my $cmd_sp = "perl -pe 's/^([^\\t]+)_(\\d+)\\t/TID_\$2\\t/' $opt_out/utax_aggregated_counts.tsv >$opt_out/utax_otu_table\n";
+    $cmd_sp .= "perl -ne 'if(/^([^\\t]+)_(\\d+)\\t/){print \"TID_\$2\\t\"; \$tax=\$1; \$tax=~s/_\\d+,/\\t/g; \$tax=~s/__sub__/__/g; \$tax=~s/__super__/__/g; print \"\$tax\\n\"; }' $opt_out/utax_aggregated_counts.tsv >$opt_out/utax_tax_table\n";
 $cmd_sp .= "head -n1 $opt_out/utax_aggregated_counts.tsv | perl -pe 's/\t/#Sample\t/;s/\t/\t\n/g' >$opt_out/mapfile.tsv\n";
-print_and_execute($cmd_sp);
+    print_and_execute($cmd_sp);
+}
 
 close LOG or die "$!";
 
