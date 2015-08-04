@@ -114,6 +114,22 @@ If you have multiple copies of usearch please make sure that usearch version 8 i
 
 $options{'usearch-bin=s'} = \( my $opt_usearch_bin = `which usearch 2>/dev/null` );
 
+=item [--rdp-jar=<FILE>] 
+
+Path to RDPclassifier jar file. (Required if --rdp is used)
+
+=cut
+
+$options{'rdp-jar=s'} = \( my $opt_rdp_jar );
+
+=item [--rdp-train-propfile=<FILE>] 
+
+Path to RDPclassifier train propfile. (Required if --rdp is used)
+
+=cut
+
+$options{'rdp-train-propfile=s'} = \( my $opt_rdp_train_propfile );
+
 =item [--help] 		     
 			     
 show help		     
