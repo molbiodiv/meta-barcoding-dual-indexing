@@ -51,7 +51,7 @@ Should utax be used for classification (default: yes)
 
 =cut
 
-$options{'utax!'} = \( my $opt_utax );
+$options{'utax!'} = \( my $opt_utax = 1 );
 
 =item --utax-db=<file>
 
