@@ -81,12 +81,21 @@ $options{'utax-taxtree=s'} = \( my $opt_utax_tt );
 
 =item [--utax-rawscore-cutoff=<int>]
 
-This value is passed to the counting script and takes the cuts the classification at the first level with rawscore below the cutoff
+This value is passed to the counting script and cuts the classification at the first level with rawscore below the cutoff
 Default = 20
 
 =cut
 
 $options{'utax-rawscore-cutoff=i'} = \( my $opt_utax_rs_cutoff = 20 );
+
+=item [--rdp-bootstrap-cutoff=<float>]
+
+This value is passed to the counting script and cuts the classification at the first level with bootstrap below the cutoff
+Default = 0.85
+
+=cut
+
+$options{'rdp-bootstrap-cutoff=f'} = \( my $opt_rdp_bootstrap_cutoff = 0.85 );
 
 =item [--fastq_truncqual=<int>]
 
