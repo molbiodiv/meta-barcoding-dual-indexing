@@ -196,6 +196,16 @@ while(@ARGV>0){
 	my $cmd_co = "perl $FindBin::RealBin/count_taxa_utax.pl --in $opt_out/utax/$base.utax --cutoff $opt_utax_rs_cutoff >$opt_out/count/$base.utax.count\n";
 	print_and_execute($cmd_co);
     }
+
+    if($opt_rdp){
+	# Classify with rdp
+	my $cmd_rd = "java -jar $opt_rdp_jar classify --train_propfile $opt_rdp_train_propfile --outputFile $opt_out/rdp/$base.rdp $opt_out/filtered/$base.fq\n";
+	print_and_execute($cmd_rd);
+	
+	# Count with custom script
+	my $cmd_cr = "perl $FindBin::RealBin/count_taxa_rdp.pl --in $opt_out/rdp/$base.rdp --cutoff $opt_rdp_bootstrap_cutoff >$opt_out/count/$base.rdp.count\n";
+	print_and_execute($cmd_cr);
+    }
 }
 
 if($opt_utax){
