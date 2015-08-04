@@ -61,7 +61,7 @@ If --rdp is set and utax is not disabled via --noutax both tools are used for cl
 
 =cut
 
-$options{'utax!'} = \( my $opt_utax = 1 );
+$options{'rdp!'} = \( my $opt_rdp = 0 );
 
 =item --utax-db=<file>
 
