@@ -249,7 +249,7 @@ sub aggregate_and_convert{
     # Split aggregated counts into tax_table and otu_table:
     my $cmd_sp = "perl -pe 's/^([^\\t]+)_(\\d+)\\t/TID_\$2\\t/' $opt_out/$type"."_aggregated_counts.tsv >$opt_out/$type"."_otu_table\n";
     $cmd_sp .= "perl -ne 'BEGIN{print \"\#OTU\\tkingdom\\tphylum\\tclass\\torder\\tfamily\\tgenus\\tspecies\\n\"}if(/^([^\\t]+)_(\\d+)\\t/){print \"TID_\$2\\t\"; \$tax=\$1; \$tax=~s/_\\d+,/\\t/g; \$tax=~s/__sub__/__/g; \$tax=~s/__super__/__/g; \$tax=~s/\\t\\w__/\\t/g; \$tax=~s/^\\w__//; \$tax=~s/[^\\w\\d\\s.-]/_/g; print \"\$tax\\n\"; }' $opt_out/$type"."_aggregated_counts.tsv >$opt_out/$type"."_tax_table\n";
-    $cmd_sp .= "head -n1 $opt_out/$type"."_aggregated_counts.tsv | perl -pe 's/\\t/#Sample\\n/;s/\\t/\\t\\n/g;s/^#Sample/#Sample\\tNumber/;' | perl -pe '\$c++;s/\\t\$/\\t\$c/' >$opt_out/mapfile.tsv\n";
+    $cmd_sp .= "head -n1 $opt_out/$type"."_aggregated_counts.tsv | perl -pe 's/\\t/#Sample\\n/;s/\\t/\\t\\n/g;s/\$/\\t\\n/;s/^#Sample/#Sample\\tNumber/;' | perl -pe 's/\\t\$/\\t\$c/;\$c++;' >$opt_out/mapfile.tsv\n";
     print_and_execute($cmd_sp);
 }
 
