@@ -82,11 +82,13 @@ Create an analysis folder and execute the following commands there (you need the
 # If your fasta headers have a different format adjust the substitude expression accordingly.
 grep "^>" ../data/viridiplantae_all_2014.fasta |
  perl -pe 's/^>(\d+).*/$1/' >viridiplantae_all_2014.gis
+
+# Now find taxonomic lineages for the gis
 perl ../code/gi2taxonomy.pl\
  --gis viridiplantae_all_2014.gis\
  --out viridiplantae_all_2014.tax\
  --species viridiplantae_all_2014.species.taxids\
- --genus viridiplantae_all_2014.genus.taxids 
+ --genus viridiplantae_all_2014.genus.taxids
 
 # This is only needed for comparison of the old reference db to the new one
 grep "^>" ../data/viridiplantae_folds_2011.fasta |
@@ -109,6 +111,18 @@ and
  - [[file:precomputed/viridiplantae_folds_2011.species.taxids][viridiplantae_folds_2011.species.taxids]]
  - [[file:precomputed/viridiplantae_folds_2011.genus.taxids][viridiplantae_folds_2011.genus.taxids]]
 All of those are also included in the precomputed folder.
+
+*ATTENTION* If the gi2taxonomy.pl command throws the following error message:
+#+BEGIN_SRC sh
+20xx/xx/xx xx:xx:xx Unable to open taxonomic database at './t/data//gi_taxid.bin'
+Unable to open taxonomic database at './t/data//gi_taxid.bin' at /xxx/xxx/NCBI-Taxonomy/lib//NCBI/Taxonomy.pm line 162
+#+END_SRC
+You have to download an NCBI Taxonomy dump by running:
+#+BEGIN_SRC 
+<in NCBI::Taxonomy dir>: ./make_gi_taxid.pl --overwrite
+#+END_SRC
+And then adjust the $TAXDIR variable in NCBI-Taxonomy/lib/NCBI/Taxonomy.pm line 28.
+
 *** UTAX and RDP training
 The following commands executed in the analysis folder generate the required fasta and tax files for RDP and UTAX:
 #+BEGIN_SRC bash :dir analysis
