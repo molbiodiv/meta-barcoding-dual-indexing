@@ -76,6 +76,10 @@ and the viridiplantae_folds_2011 dataset on <2015-06-29 Mo>.
 
 Create an analysis folder and execute the following commands there (you need the NCBI::Taxonomy module for this):
 #+BEGIN_SRC bash :dir analysis
+# First create a list of gi numbers from the fasta file
+# This only works if the header is in the form
+# '>123456 any description' with 123456 being the taxid without any prefix like 'gi|'
+# If your fasta headers have a different format adjust the substitude expression accordingly.
 grep "^>" ../data/viridiplantae_all_2014.fasta |
  perl -pe 's/^>(\d+).*/$1/' >viridiplantae_all_2014.gis
 perl ../code/gi2taxonomy.pl\
