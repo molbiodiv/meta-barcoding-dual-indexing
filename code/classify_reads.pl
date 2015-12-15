@@ -63,6 +63,18 @@ If --rdp is set and utax is not disabled via --noutax both tools are used for cl
 
 $options{'rdp!'} = \( my $opt_rdp = 0 );
 
+=item [--[no]directref]
+
+Should uclust be used for direct reference classification (default: no)
+If --directref is set and utax is not disabled via --noutax both tools are used for classification.
+Also compatible with --rdp (will run additionally).
+Further requirements for this classification method are uclust, usearch and the uchime/python_scripts
+as well as a directrefdb passed via --directrefdb <file> (file must be in fasta version of a utax-db).
+
+=cut
+
+$options{'directref!'} = \( my $opt_directref = 0 );
+
 =item --utax-db=<file>
 
 Path to the utax database file in fasta or udb format (required if not --noutax)
