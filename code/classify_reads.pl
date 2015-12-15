@@ -197,8 +197,14 @@ pod2usage( -msg => 'utax-taxtree is required to classify with utax --utax-taxtre
 pod2usage( -msg => 'rdp-jar is required to classify with RDPclassifier --rdp-jar <path> to set', -verbose => 0 ) unless ($opt_rdp_jar || !$opt_rdp);
 pod2usage( -msg => 'rdp-train-propfile is required to classify with RDPclassifier --rdp-train-propfile <path> to set', -verbose => 0 ) unless ($opt_rdp_train_propfile || !$opt_rdp);
 pod2usage( -msg => 'missing input files', -verbose => 0 ) unless (@ARGV > 1);
+pod2usage( -msg => 'missing option --directrefdb <file> (required for --directref)', -verbose => 0 ) if ($opt_directref && ! $opt_directrefdb);
+pod2usage( -msg => 'directrefdb file (specified via) --directrefdb <file> does not exist', -verbose => 0 ) if ($opt_directref && ! -e $opt_directrefdb);
+pod2usage( -msg => 'uclust not in path and bin not specified --uclust-bin <path> to set', -verbose => 0 ) if ($opt_directref && ! $opt_uclust_bin);
+pod2usage( -msg => 'path to uc2otutab.py not specified --uc2otutab-path <path> to set (required for --directref)', -verbose => 0 ) if ($opt_directref && ! $opt_uc2otutab);
+
 chomp($opt_fastq_join_bin);
 chomp($opt_usearch_bin);
+chomp($opt_uclust_bin);
 
 =head1 CODE		     
 			     
