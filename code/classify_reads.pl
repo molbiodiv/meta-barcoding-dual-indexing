@@ -182,6 +182,8 @@ chomp($opt_usearch_bin);
 make_path($opt_out.'/joined', $opt_out.'/filtered');
 make_path($opt_out.'/utax') if($opt_utax);
 make_path($opt_out.'/rdp') if($opt_rdp);
+make_path($opt_out.'/directref') if($opt_directref);
+unlink "$opt_out/directref/all.bc.fasta" if($opt_directref && -e "$opt_out/directref/all.bc.fasta");
 make_path($opt_out.'/count') if($opt_utax || $opt_rdp);
 open (LOG, ">$opt_out/log") or die "$!";;
 
@@ -197,6 +199,7 @@ while(@ARGV>0){
 
     # Filter with usearch
     my $cmd_us = "$opt_usearch_bin -fastq_filter $opt_out/joined/$base.join.fq -fastq_truncqual $opt_fastq_truncqual -fastq_minlen 150 -fastqout $opt_out/filtered/$base.fq";
+    $cmd_us .= " -fastaout $opt_out/filtered/$base.fa" if($opt_directref);
     print_and_execute($cmd_us);
 
     if($opt_utax){
