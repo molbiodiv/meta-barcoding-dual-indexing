@@ -221,6 +221,22 @@ while(@ARGV>0){
 	my $cmd_cr = "perl $FindBin::RealBin/count_taxa_rdp.pl --in $opt_out/rdp/$base.rdp --cutoff $opt_rdp_bootstrap_cutoff >$opt_out/count/$base.rdp.count\n";
 	print_and_execute($cmd_cr);
     }
+
+    if($opt_directref){
+	# Prepare file for uclust classification
+	open IN, "<$opt_out/filtered/$base.fa" or die "Unable to open filtered file $opt_out/filtered/$base.fq";
+	open OUT, ">>$opt_out/directref/all.bc.fasta" or die "Unable to open file $opt_out/directref/all.bc.fasta";
+	my $seqcounter = 1;
+	while(<IN>){
+	    if(/^>/){
+		print OUT ">$base"."_$seqcounter;barcodelabel=$base\n";
+	    } else {
+		print OUT $_;
+	    }
+	}
+	close OUT or die "Unable to close file $!";
+	close IN or die "Unable to close file $!";
+    }
 }
 
 aggregate_and_convert("utax") if($opt_utax);
