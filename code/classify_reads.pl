@@ -135,6 +135,32 @@ If you have multiple copies of usearch please make sure that usearch version 8 i
 
 $options{'usearch-bin=s'} = \( my $opt_usearch_bin = `which usearch 2>/dev/null` );
 
+=item [--uclust-bin=<FILE>] 
+
+Path to uclust binary file. Default tries if uclust is in PATH;
+
+=cut
+
+$options{'uclust-bin=s'} = \( my $opt_uclust_bin = `which uclust 2>/dev/null` );
+
+=item [--uc2otutab-path=<FILE>] 
+
+Path to uc2otutab.py file. Required if --directref is used.
+Available for download at: http://drive5.com/python/python_scripts.tar.gz
+
+=cut
+
+$options{'uc2otutab-path=s'} = \( my $opt_uc2otutab );
+
+=item [--directrefdb=<FILE>] 
+
+Path to directref database file (must be in fasta version of a utax-db).
+
+=cut
+
+$options{'directrefdb=s'} = \( my $opt_directrefdb );
+
+
 =item [--rdp-jar=<FILE>] 
 
 Path to RDPclassifier jar file. (Required if --rdp is used)
