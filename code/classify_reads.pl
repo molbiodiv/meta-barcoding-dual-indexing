@@ -273,6 +273,7 @@ while(@ARGV>0){
 
 aggregate_and_convert("utax") if($opt_utax);
 aggregate_and_convert("rdp") if($opt_rdp);
+classify_with_uclust() if($opt_directref);
 
 close LOG or die "$!";
 
@@ -313,6 +314,23 @@ sub aggregate_and_convert{
     my $cmd_sp = "perl -pe 's/^([^\\t]+)_(\\d+)\\t/TID_\$2\\t/' $opt_out/$type"."_aggregated_counts.tsv >$opt_out/$type"."_otu_table.txt\n";
     $cmd_sp .= "perl -ne 'BEGIN{print \"\\tKingdom\\tPhylum\\tClass\\tOrder\\tFamily\\tGenus\\tSpecies\\n\"}if(/^([^\\t]+)_(\\d+)\\t/){print \"TID_\$2\\t\"; \$tax=\$1; \$tax=~s/_\\d+,/\\t/g; \$tax=~s/__sub__/__/g; \$tax=~s/__super__/__/g; \$tax=~s/\\t\\w__/\\t/g; \$tax=~s/^\\w__//; \$tax=~s/[^\\w\\d\\s.-]/_/g; print \"\$tax\\n\"; }' $opt_out/$type"."_aggregated_counts.tsv >$opt_out/$type"."_tax_table.txt\n";
     $cmd_sp .= "head -n1 $opt_out/$type"."_aggregated_counts.tsv | perl -pe 's/\\t/#Sample\\n/;s/\\t/\\t\\n/g;s/\$/\\t/;s/^#Sample/#Sample\\tNumber/;' | perl -pe 's/\\t\$/\\t\$c/;\$c++;' >$opt_out/mapfile.tsv\n";
+    print_and_execute($cmd_sp);
+}
+
+=head2 classify_with_uclust
+
+This functions uses uclust and uc2otutab.py to create an otu_table and a taxon_table from directref classification.
+
+=cut
+
+sub classify_with_uclust{
+    print_and_execute("$opt_uclust_bin --input $opt_out/directref/all.bc.fasta --lib $opt_directrefdb --uc $opt_out/directref/all.bc.95.uc --fastapairs $opt_out/directref/all.bc.aln.95.fasta --libonly --id 0.95");
+    print_and_execute("python $opt_uc2otutab $opt_out/directref/all.bc.95.uc > $opt_out/directref/all.bc.95.uc.txt");
+
+    # Split aggregated counts into tax_table and otu_table:
+    my $cmd_sp = "perl -pe 's/^OTUId//; s/^([^\\t]+)_(\\d+);\\t/TID_\$2\\t/' $opt_out/directref/all.bc.95.uc.txt >$opt_out/directref_otu_table.txt\n";
+    $cmd_sp .= "perl -ne 'BEGIN{print \"\\tKingdom\\tPhylum\\tClass\\tOrder\\tFamily\\tGenus\\tSpecies\\n\"}s/^OTUId//;if(/^[^ ]+ ([^\\t]+)_(\\d+);\\t/){print \"TID_\$2\\t\"; \$tax=\$1; \$tax=~s/^Root;//; \$tax=~s/_\\d+;/\\t/g; \$tax=~s/__sub__/__/g; \$tax=~s/__super__/__/g; \$tax=~s/\\t\\w__/\\t/g; \$tax=~s/^\\w__//; \$tax=~s/[^\\w\\d\\s.-]/_/g; print \"\$tax\\n\"; }' $opt_out/directref/all.bc.95.uc.txt >$opt_out/directref_tax_table.txt\n";
+    $cmd_sp .= "head -n1 $opt_out/directref/all.bc.95.uc.txt | perl -pe 's/^OTUId//;s/\\t/#Sample\\n/;s/\\t/\\t\\n/g;s/\$/\\t/;s/^#Sample/#Sample\\tNumber/;' | perl -pe 's/\\t\$/\\t\$c/;\$c++;' >$opt_out/mapfile.tsv\n";
     print_and_execute($cmd_sp);
 }
 
