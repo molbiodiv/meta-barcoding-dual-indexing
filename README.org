@@ -7,6 +7,7 @@ Here we provide all custom scripts and commands to replicate our results.
 Furthermore you can download the pre-computed training sets for the RDPclassifier [[https://github.com/iimog/meta-barcoding-dual-indexing/raw/master/training/rdp/rdp_trained.tar.gz][here]] and UTAX [[https://github.com/iimog/meta-barcoding-dual-indexing/raw/master/training/utax/utax_trained.tar.gz][here]].
 If you find this information useful please consider citing our [[http://doi.org/10.1186/s12898-015-0051-y][article]].
 
+*Note*: The code and data in this repository is continuously enhanced. If you want a snapshot of the tools from the date of publication please use Release v1.0 (also available at [[http://dx.doi.org/10.5281/zenodo.21032][Zenodo]]).
 * Dependencies
 This is a list of software tools and versions used in the original analysis.
 We provide precomputed results for most steps so don't worry if you can't get a certain tool in a certain version.
