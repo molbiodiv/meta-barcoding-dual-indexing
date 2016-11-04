@@ -133,8 +133,8 @@ This generates the following files:
  - [[file:precomputed/viridiplantae_all_2014.gi_tax.map][viridiplantae_all_2014.gi_tax.map]]
  - [[file:precomputed/viridiplantae_all_2014.rdp.fa][viridiplantae_all_2014.rdp.fa]]
  - [[file:precomputed/viridiplantae_all_2014.rdp.tax][viridiplantae_all_2014.rdp.tax]]
- - [[file:training/utax/viridiplantae_all_2014.utax.fa][viridiplantae_all_2014.utax.fa]]
- - [[file:training/utax/viridiplantae_all_2014.utax.tax][viridiplantae_all_2014.utax.tax]]
+ - [[file:precomputed/viridiplantae_all_2014.utax.fa][viridiplantae_all_2014.utax.fa]]
+ - [[file:precomputed/viridiplantae_all_2014.utax.tax][viridiplantae_all_2014.utax.tax]]
 The first three are also included in the precomputed folder. And the last two are included in the training/utax folder.
 The utax files are ready to be used for classification. 
 However to speed up the initial step a udb file can be created as follows:
