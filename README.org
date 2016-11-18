@@ -415,7 +415,7 @@ wget http://www.ebi.ac.uk/ena/data/warehouse/filereport\?accession\=PRJEB8640\&r
 This downloads the [[../precomputed/reads.tsv][reads.tsv]] file which is also included in the precomputed folder.
 It contains a list of the 384 sequencing libraries of this project.
 This file can now be used to download all the reads with the following command executed in the raw folder:
-#+BEGIN_SRC sh :die raw
+#+BEGIN_SRC sh :dir raw
 for i in $(cut -f13 reads.tsv | grep fastq.gz | perl -pe 's/;/\n/')
 do
     wget $i
@@ -430,7 +430,7 @@ Now your folder should contain 768 .fastq files in the format described above.
 In the raw folder create a subfolder joined and execute the following commands
 #+BEGIN_SRC bash :dir raw/joined
 qiime
-for i in "../*_R1_001.fastq"
+for i in ../*_R1_001.fastq
 do
     BASE=$(basename $i _R1_001.fastq)
     join_paired_ends.py -f $i -r ../${BASE}_R2_001.fastq -o $BASE
