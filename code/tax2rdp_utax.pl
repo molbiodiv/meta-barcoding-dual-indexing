@@ -59,7 +59,7 @@ open(RDP_FA, '>', "$prefix.rdp.fa") or die "$!";
 open(UTAX_FA, '>', "$prefix.utax.fa") or die "$!";
 my $printOK = 0;
 while(<FA>){
-    if(/^>(\d+)/){
+    if(/^>(\S+)/){
 	if(exists $fullline{$1}){
 		$printOK = 1;
 		print RDP_FA ">$1 $fullline{$1}\n";
@@ -69,10 +69,10 @@ while(<FA>){
 		print STDERR "No tax information for gi: $1, skipping...\n";
 	}
     }
-    else{ 
+    else{
 	if($printOK) {
 		print RDP_FA "$_";
-		print UTAX_FA "$_";	
+		print UTAX_FA "$_";
 		}
 	}
 }
