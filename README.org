@@ -47,7 +47,7 @@ tar xzvf ../training/utax/utax_trained.tar.gz
 
 # this step is not required but recommended
 # if you choose to skip it use .fa instead of .udb when calling classify_reads.pl
-usearch -makeudb_usearch utax_trained/viridiplantae_all_2014.utax.fa\
+usearch8.0 -makeudb_usearch utax_trained/viridiplantae_all_2014.utax.fa\
  -output utax_trained/viridiplantae_all_2014.utax.udb
 
 # call the wrapper script that performs:
@@ -139,7 +139,7 @@ The first three are also included in the precomputed folder. And the last two ar
 The utax files are ready to be used for classification. 
 However to speed up the initial step a udb file can be created as follows:
 #+BEGIN_SRC bash :dir analysis
-usearch8 -makeudb_usearch viridiplantae_all_2014.utax.fa\
+usearch8.0 -makeudb_usearch viridiplantae_all_2014.utax.fa\
  -output viridiplantae_all_2014.utax.udb
 #+END_SRC
 This creates the file viridiplantae_all_2014.utax.udb which is not included as it is not required and its size is 225MB.
@@ -446,7 +446,7 @@ In the raw folder create a subfolder filtered and execute the following commands
 for i in ../joined/*
 do
     BASE=$(basename $i)
-    usearch8 -fastq_filter $i/fastqjoin.join.fastq\
+    usearch8.0 -fastq_filter $i/fastqjoin.join.fastq\
      -fastq_truncqual 19 -fastq_minlen 150 -fastqout $BASE.q20.fq
 done
 #+END_SRC
@@ -461,7 +461,7 @@ if you generated the udb file in the previous steps.
 for i in $(find ../filtered -name "*.fq")
 do   
     BASE=$(basename $i .fq)
-    usearch8 -utax $i -db ../../training/utax/viridiplantae_all_2014.utax.udb\
+    usearch8.0 -utax $i -db ../../training/utax/viridiplantae_all_2014.utax.udb\
      -utax_rawscore -tt ../../training/utax/viridiplantae_all.utax.tax\
      -utaxout $BASE.utax
 done 
