@@ -136,8 +136,10 @@ This generates the following files:
  - [[file:precomputed/viridiplantae_all_2014.utax.fa][viridiplantae_all_2014.utax.fa]]
  - [[file:precomputed/viridiplantae_all_2014.utax.tax][viridiplantae_all_2014.utax.tax]]
 The first three are also included in the precomputed folder. And the last two are included in the training/utax folder.
+The required file format changed in the new versions of usearch. The compatible file is included in 
+ - [[file:precomputed/viridiplantae_all_2014.utax.fa][viridiplantae_all_2014.sintax.fa]]
 The utax files are ready to be used for classification. 
-However to speed up the initial step a udb file can be created as follows:
+However to speed up the initial step a udb file can be created as follows (not needed for SINTAX):
 #+BEGIN_SRC bash :dir analysis
 usearch8.0 -makeudb_usearch viridiplantae_all_2014.utax.fa\
  -output viridiplantae_all_2014.utax.udb
@@ -175,7 +177,22 @@ And the folder rdp_trained including five files:
  - rdp_trained/logWordPrior.txt
 Those are the files required for RDP classification and are included as [[file:training/rdp/rdp_trained.tar.gz][rdp_trained.tar.gz]] in training/rdp
 
-Now you have everything you need to classify sequences with either RDP classifier or UTAX.
+Now you have everything you need to classify sequences with either RDP classifier or UTAX/SINTAX.
+
+*** SINTAX classification
+Sintax is not yet included in the classify_reads.pl script. To classify your reads run this on preprocessed (paired-end merged, primer-trimmed and filtered) fasta files:
+#+BEGIN_SRC bash :dir analysis
+for f in <path_to_reads>/*.fasta
+do
+out=$(basename $f .fasta)
+usearch10 -sintax $f \
+          -db precomputed/viridiplantae_all_2014.sintax.fa \
+          -tabbedout $out.sintax.txt \
+          -strand both \
+          -sintax_cutoff 0.90
+done
+#+END_SRC
+
 *** Comparison of new database to old
 **** Sequence increase
 The number of sequences 2011 and 2014 can be calculated by using grep on header lines in the fasta files:
