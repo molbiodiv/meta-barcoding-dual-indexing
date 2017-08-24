@@ -137,7 +137,7 @@ This generates the following files:
  - [[file:precomputed/viridiplantae_all_2014.utax.tax][viridiplantae_all_2014.utax.tax]]
 The first three are also included in the precomputed folder. And the last two are included in the training/utax folder.
 The required file format changed in the new versions of usearch. The compatible file is included in 
- - [[file:precomputed/viridiplantae_all_2014.utax.fa][viridiplantae_all_2014.sintax.fa]]
+ - [[file:precomputed/viridiplantae_all_2014.sintax.fa][viridiplantae_all_2014.sintax.fa]]
 The utax files are ready to be used for classification. 
 However to speed up the initial step a udb file can be created as follows (not needed for SINTAX):
 #+BEGIN_SRC bash :dir analysis
