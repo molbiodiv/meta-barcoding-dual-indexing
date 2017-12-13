@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Retrieve taxnames from bayernflora.de
-perl -MLWP::Simple -MData::Dumper -e 'for ("A".."Z"){
-	$content = get("http://www.bayernflora.de/de/checklist_pflanzen.php?ab=$_&st=&dt=");
-	push @hits , $content=~/pcheck6\b[^>]*>([^<]*)/g;
+perl -MLWP::Simple -e 'for ("A".."Z"){
+    $content = get("http://daten.bayernflora.de/de/checklist_pflanzen.php?ab=$_&st=&dt=");
+    push @hits , $content=~/pcheck6\b[^>]*>([^<]*)/g;
 }
 print join("\n", @hits);' > bayern.species.txt
 
