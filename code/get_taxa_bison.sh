@@ -12,9 +12,9 @@ do
     cut -f1 $i.checklist | cut -f1,2 -s -d" " | sort -u >$i.species
     cut -f1 -d" " $i.species | sort -u >$i.genus
     curl --form button="Save in file" --form fl=@$i.species\
-     http://www.ncbi.nlm.nih.gov/Taxonomy/TaxIdentifier/tax_identifier.cgi >$i.species.tsv
+     https://www.ncbi.nlm.nih.gov/Taxonomy/TaxIdentifier/tax_identifier.cgi >$i.species.tsv
     curl --form button="Save in file" --form fl=@$i.genus\
-     http://www.ncbi.nlm.nih.gov/Taxonomy/TaxIdentifier/tax_identifier.cgi >$i.genus.tsv
+     https://www.ncbi.nlm.nih.gov/Taxonomy/TaxIdentifier/tax_identifier.cgi >$i.genus.tsv
     cut -f7 $i.species.tsv | sort -u | grep -P "\d" >$i.species.taxids
     cut -f7 $i.genus.tsv | sort -u | grep -P "\d" >$i.genus.taxids
 done

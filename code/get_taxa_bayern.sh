@@ -11,7 +11,7 @@ print join("\n", @hits);' > bayern.species.txt
 # to get all taxids of the lineage use --form lng=1
 # to exclude common names use --form nocommons=1
 curl --form button="Save in file" --form fl=@bayern.species.txt\
- http://www.ncbi.nlm.nih.gov/Taxonomy/TaxIdentifier/tax_identifier.cgi\
+ https://www.ncbi.nlm.nih.gov/Taxonomy/TaxIdentifier/tax_identifier.cgi\
  >bayern.species.taxids.tsv
 
 # Assess assignment quality
@@ -30,7 +30,7 @@ echo
 cut -f1,2 -d" " bayern.species.txt | grep -v "&times" | grep -vw "x" | sort -u\
  >bayern.species.cleaned.txt
 curl --form button="Save in file" --form fl=@bayern.species.cleaned.txt\
- http://www.ncbi.nlm.nih.gov/Taxonomy/TaxIdentifier/tax_identifier.cgi\
+ https://www.ncbi.nlm.nih.gov/Taxonomy/TaxIdentifier/tax_identifier.cgi\
  >bayern.species.cleaned.taxids.tsv
 echo "Assignment quality for species (cleaned):"
 cut -f1 bayern.species.cleaned.taxids.tsv | sort | uniq -c
@@ -42,7 +42,7 @@ cut -f7 bayern.species.cleaned.taxids.tsv | sort -gu | tail -n+2 >bayern.species
 # But the lineage has arbitrary rank levels (some have subgenus, etc.) so not directly comparable
 cut -f1 -d" " bayern.species.txt | sort -u >bayern.genus.txt
 curl --form button="Save in file" --form fl=@bayern.genus.txt\
- http://www.ncbi.nlm.nih.gov/Taxonomy/TaxIdentifier/tax_identifier.cgi\
+ https://www.ncbi.nlm.nih.gov/Taxonomy/TaxIdentifier/tax_identifier.cgi\
  >bayern.genus.taxids.tsv
 echo "Assignment quality for genera:"
 cut -f1 bayern.genus.taxids.tsv | sort | uniq -c
