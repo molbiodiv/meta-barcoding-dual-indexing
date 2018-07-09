@@ -271,6 +271,9 @@ The results may vary depending on the date of data retrieval,
 therefore those files are included in the precomputed folder.
 **** Comparisons of checklists to reference database
 ***** Bavaria
+*Attention:* There was an issue with the precomputed checklists for bavaria, see: [[https://github.com/molbiodiv/meta-barcoding-dual-indexing/issues/5][#5]].
+After fixing those and using the most recent version of the bayern-flora checklist (July 2018) you end up with the following numbers:
+
 #+BEGIN_SRC sh :dir precomputed
 SPECIES_BAVARIA=$(cat flora_bavaria/bayern.species.cleaned.taxids | wc -l)
 COMMON_OLD=$(cat viridiplantae_folds_2011.species.taxids flora_bavaria/bayern.species.cleaned.taxids | sort | uniq -d | wc -l)
@@ -284,10 +287,10 @@ echo Bavaria Genus 2014 $(printf %.1f $(echo "100 * $COMMON_NEW/$GENERA_BAVARIA"
 echo Bavaria Genus 2011 $(printf %.1f $(echo "100 * $COMMON_OLD/$GENERA_BAVARIA" | bc -l))%
 #+END_SRC
 
-| Bavaria | Species | 2014 | 80.1% |
-| Bavaria | Species | 2011 | 53.1% |
-| Bavaria | Genus   | 2014 | 90.4% |
-| Bavaria | Genus   | 2011 | 75.0% |
+| Bavaria | Species | 2014 | 73.6% |
+| Bavaria | Species | 2011 | 48.7% |
+| Bavaria | Genus   | 2014 | 86.6% |
+| Bavaria | Genus   | 2011 | 71.3% |
 
 ***** USA
 To get a list of species and genus coverage for each state execute the following in the analysis folder:
