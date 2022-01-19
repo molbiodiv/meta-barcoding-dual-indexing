@@ -71,7 +71,7 @@ This file [[file:data/viridiplantae_all_2014.fasta][viridiplantae_all_2014.fasta
 Assign NCBI taxonomy on kingdom, phylum, class, order, family, genus and species level by mapping gi to taxid.
 
 *ATTENTION:* Results of the taxonomic assignment may vary depending on the date of calculation as
-NCBI Taxonoy is continuously revised. The viridiplantae_all_2014 dataset was processed on <2015-05-28 Do>
+NCBI Taxonomy is continuously revised. The viridiplantae_all_2014 dataset was processed on <2015-05-28 Do>
 and the viridiplantae_folds_2011 dataset on <2015-06-29 Mo>.
 
 Create an analysis folder and execute the following commands there (you need the NCBI::Taxonomy module for this):
